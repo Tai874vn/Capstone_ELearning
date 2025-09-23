@@ -31,6 +31,7 @@ const countries = [
   { code: '+86', name: 'China', flag: '🇨🇳', iso: 'CN' },
   { code: '+91', name: 'India', flag: '🇮🇳', iso: 'IN' },
   { code: '+81', name: 'Japan', flag: '🇯🇵', iso: 'JP' },
+  { code: '+84', name: 'VietNam', flag: '🇻🇳', iso: 'VN' },
 ]
 
 export interface PhoneInputProps
@@ -80,7 +81,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
               variant="outline"
               role="combobox"
               aria-expanded={open}
-              className="w-[120px] justify-between rounded-r-none border-r-0 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-600"
+              className="w-[120px] justify-between rounded-r-none border-r-0"
             >
               <span className="flex items-center gap-2">
                 <span className="text-lg">{selectedCountry.flag}</span>
@@ -89,7 +90,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
               <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-[300px] p-0">
+          <PopoverContent className="w-[300px] p-0 bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 shadow-lg">
             <Command>
               <CommandInput placeholder="Search country..." />
               <CommandEmpty>No country found.</CommandEmpty>
@@ -127,10 +128,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
           type="tel"
           value={phoneNumber}
           onChange={(e) => handlePhoneChange(e.target.value)}
-          className={cn(
-            'rounded-l-none bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400',
-            className
-          )}
+          className={cn('rounded-l-none', className)}
         />
       </div>
     )

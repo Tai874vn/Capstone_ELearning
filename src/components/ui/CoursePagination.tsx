@@ -46,7 +46,7 @@ export function CoursePagination({ currentPage, totalPages, onPageChange }: Cour
         size="sm"
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="flex items-center space-x-1"
+        className="flex items-center space-x-1 cursor-pointer"
       >
         <ChevronLeft className="h-4 w-4" />
         <span>Previous</span>
@@ -62,7 +62,7 @@ export function CoursePagination({ currentPage, totalPages, onPageChange }: Cour
                 variant={currentPage === page ? "default" : "outline"}
                 size="sm"
                 onClick={() => onPageChange(page as number)}
-                className={`min-w-[2.5rem] ${
+                className={`min-w-[2.5rem] cursor-pointer ${
                   currentPage === page
                     ? 'bg-blue-600 text-white hover:bg-blue-700'
                     : ''
@@ -80,7 +80,7 @@ export function CoursePagination({ currentPage, totalPages, onPageChange }: Cour
         size="sm"
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="flex items-center space-x-1"
+        className="flex items-center space-x-1 cursor-pointer"
       >
         <span>Next</span>
         <ChevronRight className="h-4 w-4" />

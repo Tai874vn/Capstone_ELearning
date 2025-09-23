@@ -2,6 +2,13 @@ import { z } from 'zod'
 
 export const registerFormSchema = z
   .object({
+    username: z
+      .string()
+      .min(3, { message: 'Username must be at least 3 characters long' })
+      .max(20, { message: 'Username must be less than 20 characters' })
+      .regex(/^[a-zA-Z0-9_]+$/, {
+        message: 'Username can only contain letters, numbers, and underscores'
+      }),
     name: z
       .string()
       .min(2, { message: 'Name must be at least 2 characters long' })
@@ -29,9 +36,9 @@ export const registerFormSchema = z
   })
 
 export const loginFormSchema = z.object({
-  email: z
+  username: z
     .string()
-    .email({ message: 'Please enter a valid email address' }),
+    .min(1, { message: 'Username is required' }),
   password: z
     .string()
     .min(1, { message: 'Password is required' }),

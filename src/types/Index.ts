@@ -99,16 +99,21 @@ export interface CourseState {
   featuredCourses: Course[];
   loading: boolean;
   error: string | null;
+  currentPage: number;
+  totalCount: number;
+  totalPages: number;
 
   // Actions
   fetchCourses: () => Promise<void>;
+  fetchCoursesByGroup: (groupCode: string, page?: number, pageSize?: number) => Promise<void>;
   fetchCourseDetail: (courseCode: string) => Promise<void>;
   fetchCategories: () => Promise<void>;
-  fetchCoursesByCategory: (categoryCode: string) => Promise<void>;
-  searchCourses: (keyword: string) => Promise<void>;
+  fetchCoursesByCategory: (categoryCode: string, groupCode?: string, page?: number, pageSize?: number) => Promise<void>;
+  searchCourses: (keyword: string, groupCode?: string, page?: number, pageSize?: number) => Promise<void>;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
   clearCourseDetail: () => void;
+  setPage: (page: number) => void;
 }
 
 export interface AuthState {

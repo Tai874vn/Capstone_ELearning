@@ -9,7 +9,7 @@ interface CourseCardProps {
 export function CourseCard({ course, onClick }: CourseCardProps) {
   return (
     <div
-      className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer"
+      className="bg-card border border-border rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer"
       onClick={() => onClick?.(course.maKhoaHoc)}
     >
       <div className="relative">
@@ -25,15 +25,15 @@ export function CourseCard({ course, onClick }: CourseCardProps) {
       </div>
 
       <div className="p-6">
-        <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2">
+        <h3 className="text-xl font-semibold text-card-foreground mb-2 line-clamp-2">
           {course.tenKhoaHoc}
         </h3>
 
-        <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">
+        <p className="text-muted-foreground mb-4 line-clamp-3">
           {course.moTa}
         </p>
 
-        <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 mb-4">
+        <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
           <span>By {course.nguoiTao.hoTen}</span>
           <span>{course.luotXem} views</span>
         </div>
@@ -42,7 +42,7 @@ export function CourseCard({ course, onClick }: CourseCardProps) {
           <span className="text-blue-600 dark:text-blue-400 font-semibold">
             {course.soLuongHocVien} students
           </span>
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+          <button className="bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer">
             View Course
           </button>
         </div>

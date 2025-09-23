@@ -76,10 +76,10 @@ export default function LoginPage() {
         </Link>
       </div>
 
-      <Card className="w-full max-w-sm bg-white dark:bg-gray-800 shadow-xl border border-gray-200 dark:border-gray-700">
+      <Card className="w-full max-w-sm shadow-xl">
         <CardHeader>
-          <CardTitle className="text-gray-900 dark:text-white text-xl">Login to your account</CardTitle>
-          <CardDescription className="text-gray-600 dark:text-gray-400">
+          <CardTitle className="text-card-foreground text-xl">Login to your account</CardTitle>
+          <CardDescription className="text-muted-foreground">
             Enter your credentials below to login to your account
           </CardDescription>
           <CardAction>
@@ -95,7 +95,7 @@ export default function LoginPage() {
           <CardContent>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
-                <Label htmlFor="email" className="text-gray-700 dark:text-gray-300 font-medium">
+                <Label htmlFor="email" className="text-card-foreground font-medium">
                   Email/Username
                 </Label>
                 <Input
@@ -103,16 +103,15 @@ export default function LoginPage() {
                   {...register('email')}
                   type="text"
                   placeholder="your-email@example.com"
-                  className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400"
                 />
                 {errors.email && (
-                  <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+                  <p className="text-destructive text-sm mt-1">{errors.email.message}</p>
                 )}
               </div>
 
               <div className="grid gap-2">
                 <div className="flex items-center">
-                  <Label htmlFor="password" className="text-gray-700 dark:text-gray-300 font-medium">
+                  <Label htmlFor="password" className="text-card-foreground font-medium">
                     Password
                   </Label>
                   <Link
@@ -127,12 +126,12 @@ export default function LoginPage() {
                     id="password"
                     {...register('password')}
                     type={showPassword ? 'text' : 'password'}
-                    className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white pr-10"
+                    className="pr-10"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
                   >
                     {showPassword ? (
                       <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -147,7 +146,7 @@ export default function LoginPage() {
                   </button>
                 </div>
                 {errors.password && (
-                  <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+                  <p className="text-destructive text-sm mt-1">{errors.password.message}</p>
                 )}
               </div>
             </div>
@@ -157,7 +156,7 @@ export default function LoginPage() {
             <Button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-medium"
+              className="w-full font-medium"
             >
               {loading ? (
                 <div className="flex items-center gap-2">

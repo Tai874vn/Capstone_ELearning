@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ELearning Platform",
+  title: "CyberSoft",
   description: "Learn without limits - Discover thousands of courses from expert instructors",
 };
 
@@ -34,7 +34,7 @@ export default function RootLayout({
       >
         <QueryProvider>
           <ThemeProvider>
-            <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+            <div className="min-h-screen transition-colors duration-300">
               <Header />
               <main>
                 {children}

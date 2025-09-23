@@ -1,215 +1,88 @@
 'use client';
 
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCourseStore } from '../store/courseStore';
 import { CourseCard } from '../components/ui/CourseCard';
-import { CourseCarousel } from '../components/ui/CourseCarousel';
-import { CoursePagination } from '../components/ui/CoursePagination';
-import { SearchBar } from '../components/ui/SearchBar';
 
 export default function HomePage() {
   const router = useRouter();
   const {
     courses,
-    categories,
-    featuredCourses,
     loading,
     error,
-    fetchCourses,
-    fetchCategories,
-    searchCourses,
-    fetchCoursesByCategory
+    fetchCourses
   } = useCourseStore();
-
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [searchQuery, setSearchQuery] = useState<string>('');
-  const [currentPage, setCurrentPage] = useState<number>(1);
-
-  const COURSES_PER_PAGE = 8;
 
   useEffect(() => {
     fetchCourses();
-    fetchCategories();
-  }, [fetchCourses, fetchCategories]);
-
-  const handleSearch = async (query: string) => {
-    setSearchQuery(query);
-    setCurrentPage(1); // Reset to first page when searching
-    if (query.trim()) {
-      await searchCourses(query);
-      setSelectedCategory('all');
-    } else {
-      await fetchCourses();
-    }
-  };
-
-  const handleCategorySelect = async (categoryCode: string) => {
-    setSelectedCategory(categoryCode);
-    setSearchQuery('');
-    setCurrentPage(1); // Reset to first page when changing category
-    if (categoryCode === 'all') {
-      await fetchCourses();
-    } else {
-      await fetchCoursesByCategory(categoryCode);
-    }
-  };
+  }, [fetchCourses]);
 
   const handleCourseClick = (courseId: string) => {
     router.push(`/course/${courseId}`);
   };
 
-  // Pagination calculations
-  const paginatedCourses = useMemo(() => {
-    const startIndex = (currentPage - 1) * COURSES_PER_PAGE;
-    const endIndex = startIndex + COURSES_PER_PAGE;
-    return courses.slice(startIndex, endIndex);
-  }, [courses, currentPage, COURSES_PER_PAGE]);
-
-  const totalPages = Math.ceil(courses.length / COURSES_PER_PAGE);
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    // Smooth scroll to top of courses section
-    document.getElementById('courses-section')?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start'
-    });
-  };
+  // Get 8 most recent courses (sorted by ngayTao)
+  const recentCourses = courses
+    .sort((a, b) => new Date(b.ngayTao).getTime() - new Date(a.ngayTao).getTime())
+    .slice(0, 8);
 
   return (
     <>
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-purple-700 dark:from-blue-800 dark:to-purple-900 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-5xl font-bold mb-6">
-            Learn Without Limits
-          </h2>
-          <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Discover thousands of courses from expert instructors and advance your skills at your own pace
-          </p>
-          <div className="max-w-2xl mx-auto">
-            <SearchBar
-              onSearch={handleSearch}
-              placeholder="What do you want to learn today?"
-              className="mb-4"
-            />
-          </div>
-        </div>
-      </section>
+      
 
-      {/* Main Content */}
+      {/* Recent Courses Section */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Category Filter */}
-        <div className="mb-8">
-          <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-            Browse by Category
-          </h3>
-          <div className="flex flex-wrap gap-2">
-            <button
-              onClick={() => handleCategorySelect('all')}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                selectedCategory === 'all'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600'
-              }`}
-            >
-              All Courses
-            </button>
-            {categories.map((category) => (
-              <button
-                key={category.maDanhMuc}
-                onClick={() => handleCategorySelect(category.maDanhMuc)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  selectedCategory === category.maDanhMuc
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600'
-                }`}
-              >
-                {category.tenDanhMuc}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Featured Courses Carousel */}
-        {!searchQuery && selectedCategory === 'all' && featuredCourses.length > 0 && (
-          <section className="mb-12">
-            <CourseCarousel
-              courses={featuredCourses}
-              onCourseClick={handleCourseClick}
-              title=" Most Popular Courses"
-            />
-          </section>
-        )}
-
-        {/* Courses Section */}
-        <section id="courses-section">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
-              {searchQuery ? `Search results for "${searchQuery}"` :
-               selectedCategory === 'all' ? 'All Courses' :
-               categories.find(c => c.maDanhMuc === selectedCategory)?.tenDanhMuc || 'Courses'}
+        <section>
+          <div className="flex items-center justify-between mb-8">
+            <h3 className="text-3xl font-bold text-foreground">
+              Recent Courses
             </h3>
-            <div className="flex items-center space-x-4">
-              <span className="text-gray-600 dark:text-gray-400">
-                {courses.length} total courses
-              </span>
-              {totalPages > 1 && (
-                <span className="text-gray-500 dark:text-gray-400 text-sm">
-                  Page {currentPage} of {totalPages}
-                </span>
-              )}
-            </div>
+            <button
+              onClick={() => router.push('/danhmuckhoahoc?manhom=GP01')}
+              className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium"
+            >
+              View All Courses →
+            </button>
           </div>
 
           {/* Loading State */}
           {loading && (
             <div className="flex items-center justify-center py-12">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-              <span className="ml-2 text-gray-600 dark:text-gray-400">Loading courses...</span>
+              <span className="ml-2 text-muted-foreground">Loading courses...</span>
             </div>
           )}
 
           {/* Error State */}
           {error && (
-            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-6">
-              <p className="text-red-800 dark:text-red-200">{error}</p>
+            <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4 mb-6">
+              <p className="text-destructive">{error}</p>
               <button
                 onClick={() => fetchCourses()}
-                className="mt-2 text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-200 font-medium"
+                className="mt-2 text-destructive hover:text-destructive/80 font-medium"
               >
                 Try again
               </button>
             </div>
           )}
 
-          {/* Courses Grid */}
-          {!loading && paginatedCourses.length > 0 && (
-            <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {paginatedCourses.map((course) => (
-                  <CourseCard
-                    key={course.maKhoaHoc}
-                    course={course}
-                    onClick={handleCourseClick}
-                  />
-                ))}
-              </div>
-
-              {/* Pagination */}
-              {totalPages > 1 && (
-                <CoursePagination
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  onPageChange={handlePageChange}
+          {/* Recent Courses Grid */}
+          {!loading && recentCourses.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {recentCourses.map((course) => (
+                <CourseCard
+                  key={course.maKhoaHoc}
+                  course={course}
+                  onClick={handleCourseClick}
                 />
-              )}
-            </>
+              ))}
+            </div>
           )}
 
           {/* Empty State */}
-          {!loading && paginatedCourses.length === 0 && !error && (
+          {!loading && recentCourses.length === 0 && !error && (
             <div className="text-center py-12">
               <svg
                 className="mx-auto h-12 w-12 text-gray-400"
@@ -224,9 +97,9 @@ export default function HomePage() {
                   d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
                 />
               </svg>
-              <h3 className="mt-4 text-lg font-medium text-gray-900 dark:text-white">No courses found</h3>
-              <p className="mt-2 text-gray-600 dark:text-gray-400">
-                {searchQuery ? 'Try searching for something else' : 'Try selecting a different category'}
+              <h3 className="mt-4 text-lg font-medium text-foreground">No courses available</h3>
+              <p className="mt-2 text-muted-foreground">
+                Check back later for new courses
               </p>
             </div>
           )}

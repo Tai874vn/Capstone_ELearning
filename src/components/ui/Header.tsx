@@ -1,10 +1,20 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useTheme } from '../../context/themecontext';
+import { useAuthStore } from '../../store/authStore';
+import { Button } from './button';
 
 export function Header() {
   const { theme, toggleTheme } = useTheme();
+  const { user, isAuthenticated, logout } = useAuthStore();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    logout();
+    router.push('/');
+  };
 
   return (
     <header className="bg-white dark:bg-gray-800 shadow-sm">
@@ -14,18 +24,35 @@ export function Header() {
             ELearning Platform
           </Link>
           <div className="flex items-center space-x-4">
-            <Link
-              href="/login"
-              className="px-4 py-2 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium transition-colors"
-            >
-              Login
-            </Link>
-            <Link
-              href="/register"
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
-            >
-              Sign Up
-            </Link>
+            {isAuthenticated ? (
+              <>
+                <div className="flex items-center space-x-2">
+                  <span className="text-gray-700 dark:text-gray-300">Welcome, {user?.hoTen}</span>
+                </div>
+                <Button
+                  onClick={handleLogout}
+                  variant="outline"
+                  className="border-red-300 text-red-600 hover:bg-red-50 hover:border-red-400 dark:border-red-600 dark:text-red-400 dark:hover:bg-red-900/20"
+                >
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="px-4 py-2 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium transition-colors"
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/register"
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
             <button
               onClick={toggleTheme}
               className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"

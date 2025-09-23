@@ -1,50 +1,13 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import api from '../services/api';
-
-export interface Course {
-  maKhoaHoc: string;
-  tenKhoaHoc: string;
-  moTa: string;
-  hinhAnh: string;
-  ngayTao: string;
-  luotXem: number;
-  soLuongHocVien: number;
-  danhMucKhoaHoc: {
-    maDanhMucKhoaHoc: string;
-    tenDanhMucKhoaHoc: string;
-  };
-  nguoiTao: {
-    taiKhoan: string;
-    hoTen: string;
-  };
-}
-
-export interface CourseCategory {
-  maDanhMuc: string;
-  tenDanhMuc: string;
-}
-
-interface CourseState {
-  courses: Course[];
-  categories: CourseCategory[];
-  featuredCourses: Course[];
-  loading: boolean;
-  error: string | null;
-
-  // Actions
-  fetchCourses: () => Promise<void>;
-  fetchCategories: () => Promise<void>;
-  fetchCoursesByCategory: (categoryCode: string) => Promise<void>;
-  searchCourses: (keyword: string) => Promise<void>;
-  setLoading: (loading: boolean) => void;
-  setError: (error: string | null) => void;
-}
+import type { Course, CourseCategory, CourseState, CourseDetail } from '../types/Index';
 
 export const useCourseStore = create<CourseState>()(
   devtools(
     (set, get) => ({
       courses: [],
+      courseDetail: null,
       categories: [],
       featuredCourses: [],
       loading: false,
@@ -52,20 +15,38 @@ export const useCourseStore = create<CourseState>()(
 
       setLoading: (loading) => set({ loading }),
       setError: (error) => set({ error }),
+      clearCourseDetail: () => set({ courseDetail: null }),
 
       fetchCourses: async () => {
         try {
           set({ loading: true, error: null });
           const response = await api.get('/QuanLyKhoaHoc/LayDanhSachKhoaHoc');
           const courses = response.data;
+
+          // Sort courses by views (luotXem) in descending order for featured courses
+          const sortedByViews = [...courses].sort((a, b) => (b.luotXem || 0) - (a.luotXem || 0));
+
           set({
             courses,
-            featuredCourses: courses.slice(0, 6), // First 6 as featured
+            featuredCourses: sortedByViews.slice(0, 6), // Top 6 most viewed courses
             loading: false
           });
         } catch (error: any) {
           set({
             error: error.response?.data?.message || 'Failed to fetch courses',
+            loading: false
+          });
+        }
+      },
+
+      fetchCourseDetail: async (courseCode: string) => {
+        try {
+          set({ loading: true, error: null });
+          const response = await api.get(`/QuanLyKhoaHoc/LayThongTinKhoaHoc?maKhoaHoc=${courseCode}`);
+          set({ courseDetail: response.data, loading: false });
+        } catch (error: any) {
+          set({
+            error: error.response?.data?.message || 'Failed to fetch course details',
             loading: false
           });
         }

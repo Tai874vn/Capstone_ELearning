@@ -1,0 +1,371 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { useCourseStore } from '@/store/courseStore';
+import { useAuthStore } from '@/store/authStore';
+import { courseService } from '@/services/courseService';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import Link from 'next/link';
+import { toast } from 'sonner';
+import {
+  CalendarDays,
+  Users,
+  Eye,
+  Star,
+  Clock,
+  BookOpen,
+  User,
+  ArrowLeft,
+  CheckCircle,
+  XCircle,
+} from 'lucide-react';
+
+export default function CourseDetailPage() {
+  const params = useParams();
+  const router = useRouter();
+  const courseId = params.id as string;
+
+  const { courseDetail, loading, error, fetchCourseDetail, clearCourseDetail } = useCourseStore();
+  const { user, isAuthenticated } = useAuthStore();
+
+  const [isEnrolled, setIsEnrolled] = useState(false);
+  const [enrollmentLoading, setEnrollmentLoading] = useState(false);
+
+  useEffect(() => {
+    if (courseId) {
+      fetchCourseDetail(courseId);
+    }
+
+    return () => {
+      clearCourseDetail();
+    };
+  }, [courseId, fetchCourseDetail, clearCourseDetail]);
+
+  useEffect(() => {
+    // Check if user is enrolled in this course
+    const checkEnrollment = async () => {
+      if (isAuthenticated && user && courseDetail) {
+        try {
+          const enrolledCourses = await courseService.getEnrolledCourses(user.taiKhoan);
+          setIsEnrolled(enrolledCourses.some(course => course.maKhoaHoc === courseId));
+        } catch (error) {
+          console.error('Failed to check enrollment:', error);
+        }
+      }
+    };
+
+    checkEnrollment();
+  }, [isAuthenticated, user, courseDetail, courseId]);
+
+  const handleEnrollment = async () => {
+    if (!isAuthenticated) {
+      toast.error('Please login to enroll in courses');
+      router.push('/login');
+      return;
+    }
+
+    if (!user || !courseDetail) return;
+
+    setEnrollmentLoading(true);
+    try {
+      const enrollmentData = {
+        maKhoaHoc: courseDetail.maKhoaHoc,
+        taiKhoan: user.taiKhoan,
+      };
+
+      if (isEnrolled) {
+        await courseService.unenrollCourse(enrollmentData);
+        setIsEnrolled(false);
+        toast.success('Successfully unenrolled from course');
+      } else {
+        await courseService.enrollCourse(enrollmentData);
+        setIsEnrolled(true);
+        toast.success('Successfully enrolled in course');
+      }
+    } catch (error: any) {
+      const message = error.response?.data?.message ||
+        (isEnrolled ? 'Failed to unenroll from course' : 'Failed to enroll in course');
+      toast.error(message);
+    } finally {
+      setEnrollmentLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="flex items-center space-x-2">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <span className="text-gray-600 dark:text-gray-400">Loading course details...</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !courseDetail) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="text-center">
+          <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/20">
+            <XCircle className="h-6 w-6 text-red-600 dark:text-red-400" />
+          </div>
+          <h3 className="mt-4 text-lg font-medium text-gray-900 dark:text-white">Course not found</h3>
+          <p className="mt-2 text-gray-600 dark:text-gray-400">
+            {error || 'The course you are looking for does not exist.'}
+          </p>
+          <Button
+            onClick={() => router.push('/')}
+            className="mt-4"
+            variant="outline"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Home
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  };
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* Back Navigation */}
+      <div className="mb-6">
+        <Link
+          href="/"
+          className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium transition-colors"
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Back to Courses
+        </Link>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Main Content */}
+        <div className="lg:col-span-2">
+          {/* Course Header */}
+          <div className="mb-8">
+            <div className="aspect-video relative mb-6 overflow-hidden rounded-lg">
+              <img
+                src={courseDetail.hinhAnh}
+                alt={courseDetail.tenKhoaHoc}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute top-4 right-4">
+                <Badge variant="secondary" className="bg-blue-600 text-white">
+                  {courseDetail.danhMucKhoaHoc.tenDanhMucKhoaHoc}
+                </Badge>
+              </div>
+            </div>
+
+            <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+              {courseDetail.tenKhoaHoc}
+            </h1>
+
+            <div className="flex flex-wrap items-center gap-4 text-gray-600 dark:text-gray-400 mb-6">
+              <div className="flex items-center">
+                <User className="h-4 w-4 mr-1" />
+                <span>By {courseDetail.nguoiTao.hoTen}</span>
+              </div>
+              <div className="flex items-center">
+                <CalendarDays className="h-4 w-4 mr-1" />
+                <span>Created {formatDate(courseDetail.ngayTao)}</span>
+              </div>
+              <div className="flex items-center">
+                <Eye className="h-4 w-4 mr-1" />
+                <span>{courseDetail.luotXem?.toLocaleString() || 0} views</span>
+              </div>
+              <div className="flex items-center">
+                <Users className="h-4 w-4 mr-1" />
+                <span>{courseDetail.soLuongHocVien || 0} students</span>
+              </div>
+              {courseDetail.danhGia && (
+                <div className="flex items-center">
+                  <Star className="h-4 w-4 mr-1 text-yellow-500" />
+                  <span>{courseDetail.danhGia}/5 rating</span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Course Description */}
+          <Card className="mb-8">
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <BookOpen className="h-5 w-5 mr-2" />
+                About this course
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="prose prose-gray dark:prose-invert max-w-none">
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                  {courseDetail.moTa}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Students Section */}
+          {courseDetail.thongTinHocVien && courseDetail.thongTinHocVien.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Users className="h-5 w-5 mr-2" />
+                  Students ({courseDetail.thongTinHocVien.length})
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                  {courseDetail.thongTinHocVien.slice(0, 12).map((student) => (
+                    <div
+                      key={student.taiKhoan}
+                      className="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                    >
+                      <div className="flex-shrink-0">
+                        <img
+                          src={student.hinhAnh || '/api/placeholder/32/32'}
+                          alt={student.hoTen}
+                          className="h-8 w-8 rounded-full object-cover"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(student.hoTen)}&background=3b82f6&color=fff`;
+                          }}
+                        />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                          {student.hoTen}
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                          @{student.taiKhoan}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                {courseDetail.thongTinHocVien.length > 12 && (
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-4 text-center">
+                    And {courseDetail.thongTinHocVien.length - 12} more students...
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+          )}
+        </div>
+
+        {/* Sidebar */}
+        <div className="lg:col-span-1">
+          <div className="sticky top-8">
+            <Card>
+              <CardContent className="p-6">
+                <div className="text-center mb-6">
+                  <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">
+                    Free
+                  </div>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    Access to all course materials
+                  </p>
+                </div>
+
+                <Button
+                  onClick={handleEnrollment}
+                  disabled={enrollmentLoading}
+                  className={`w-full mb-4 ${
+                    isEnrolled
+                      ? 'bg-red-600 hover:bg-red-700 text-white'
+                      : 'bg-blue-600 hover:bg-blue-700 text-white'
+                  }`}
+                >
+                  {enrollmentLoading ? (
+                    <div className="flex items-center">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      {isEnrolled ? 'Unenrolling...' : 'Enrolling...'}
+                    </div>
+                  ) : (
+                    <div className="flex items-center">
+                      {isEnrolled ? (
+                        <>
+                          <XCircle className="h-4 w-4 mr-2" />
+                          Unenroll from Course
+                        </>
+                      ) : (
+                        <>
+                          <CheckCircle className="h-4 w-4 mr-2" />
+                          Enroll Now
+                        </>
+                      )}
+                    </div>
+                  )}
+                </Button>
+
+                {isEnrolled && (
+                  <div className="flex items-center justify-center text-green-600 dark:text-green-400 text-sm mb-4">
+                    <CheckCircle className="h-4 w-4 mr-1" />
+                    You are enrolled in this course
+                  </div>
+                )}
+
+                <div className="space-y-4 text-sm">
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-600 dark:text-gray-400">Level:</span>
+                    <Badge variant="outline">All Levels</Badge>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-600 dark:text-gray-400">Duration:</span>
+                    <span className="font-medium">Self-paced</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-600 dark:text-gray-400">Language:</span>
+                    <span className="font-medium">English</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-600 dark:text-gray-400">Certificate:</span>
+                    <span className="font-medium">Yes</span>
+                  </div>
+                </div>
+
+                <hr className="my-6" />
+
+                <div className="space-y-3">
+                  <h4 className="font-semibold text-gray-900 dark:text-white">
+                    What you'll learn:
+                  </h4>
+                  <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                    <li className="flex items-start">
+                      <CheckCircle className="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                      Core concepts and fundamentals
+                    </li>
+                    <li className="flex items-start">
+                      <CheckCircle className="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                      Practical hands-on experience
+                    </li>
+                    <li className="flex items-start">
+                      <CheckCircle className="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                      Real-world applications
+                    </li>
+                    <li className="flex items-start">
+                      <CheckCircle className="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                      Industry best practices
+                    </li>
+                  </ul>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

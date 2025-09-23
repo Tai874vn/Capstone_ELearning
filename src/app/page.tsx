@@ -1,11 +1,15 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 import { useCourseStore } from '../store/courseStore';
 import { CourseCard } from '../components/ui/CourseCard';
+import { CourseCarousel } from '../components/ui/CourseCarousel';
+import { CoursePagination } from '../components/ui/CoursePagination';
 import { SearchBar } from '../components/ui/SearchBar';
 
 export default function HomePage() {
+  const router = useRouter();
   const {
     courses,
     categories,
@@ -20,6 +24,9 @@ export default function HomePage() {
 
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [currentPage, setCurrentPage] = useState<number>(1);
+
+  const COURSES_PER_PAGE = 8;
 
   useEffect(() => {
     fetchCourses();
@@ -28,6 +35,7 @@ export default function HomePage() {
 
   const handleSearch = async (query: string) => {
     setSearchQuery(query);
+    setCurrentPage(1); // Reset to first page when searching
     if (query.trim()) {
       await searchCourses(query);
       setSelectedCategory('all');
@@ -39,6 +47,7 @@ export default function HomePage() {
   const handleCategorySelect = async (categoryCode: string) => {
     setSelectedCategory(categoryCode);
     setSearchQuery('');
+    setCurrentPage(1); // Reset to first page when changing category
     if (categoryCode === 'all') {
       await fetchCourses();
     } else {
@@ -47,11 +56,26 @@ export default function HomePage() {
   };
 
   const handleCourseClick = (courseId: string) => {
-    // Navigate to course detail page
-    console.log('Navigate to course:', courseId);
+    router.push(`/course/${courseId}`);
   };
 
-  const displayCourses = searchQuery ? courses : (selectedCategory === 'all' ? courses : courses);
+  // Pagination calculations
+  const paginatedCourses = useMemo(() => {
+    const startIndex = (currentPage - 1) * COURSES_PER_PAGE;
+    const endIndex = startIndex + COURSES_PER_PAGE;
+    return courses.slice(startIndex, endIndex);
+  }, [courses, currentPage, COURSES_PER_PAGE]);
+
+  const totalPages = Math.ceil(courses.length / COURSES_PER_PAGE);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    // Smooth scroll to top of courses section
+    document.getElementById('courses-section')?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+  };
 
   return (
     <>
@@ -108,35 +132,35 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Featured Courses */}
+        {/* Featured Courses Carousel */}
         {!searchQuery && selectedCategory === 'all' && featuredCourses.length > 0 && (
           <section className="mb-12">
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-              Featured Courses
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {featuredCourses.map((course) => (
-                <CourseCard
-                  key={course.maKhoaHoc}
-                  course={course}
-                  onClick={handleCourseClick}
-                />
-              ))}
-            </div>
+            <CourseCarousel
+              courses={featuredCourses}
+              onCourseClick={handleCourseClick}
+              title=" Most Popular Courses"
+            />
           </section>
         )}
 
         {/* Courses Section */}
-        <section>
+        <section id="courses-section">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
               {searchQuery ? `Search results for "${searchQuery}"` :
                selectedCategory === 'all' ? 'All Courses' :
                categories.find(c => c.maDanhMuc === selectedCategory)?.tenDanhMuc || 'Courses'}
             </h3>
-            <span className="text-gray-600 dark:text-gray-400">
-              {displayCourses.length} courses found
-            </span>
+            <div className="flex items-center space-x-4">
+              <span className="text-gray-600 dark:text-gray-400">
+                {courses.length} total courses
+              </span>
+              {totalPages > 1 && (
+                <span className="text-gray-500 dark:text-gray-400 text-sm">
+                  Page {currentPage} of {totalPages}
+                </span>
+              )}
+            </div>
           </div>
 
           {/* Loading State */}
@@ -161,20 +185,31 @@ export default function HomePage() {
           )}
 
           {/* Courses Grid */}
-          {!loading && displayCourses.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {displayCourses.map((course) => (
-                <CourseCard
-                  key={course.maKhoaHoc}
-                  course={course}
-                  onClick={handleCourseClick}
+          {!loading && paginatedCourses.length > 0 && (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {paginatedCourses.map((course) => (
+                  <CourseCard
+                    key={course.maKhoaHoc}
+                    course={course}
+                    onClick={handleCourseClick}
+                  />
+                ))}
+              </div>
+
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <CoursePagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={handlePageChange}
                 />
-              ))}
-            </div>
+              )}
+            </>
           )}
 
           {/* Empty State */}
-          {!loading && displayCourses.length === 0 && !error && (
+          {!loading && paginatedCourses.length === 0 && !error && (
             <div className="text-center py-12">
               <svg
                 className="mx-auto h-12 w-12 text-gray-400"

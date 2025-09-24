@@ -1,15 +1,27 @@
 import * as React from "react"
+import { useState, useEffect } from "react"
+import { useTheme } from "../../context/themecontext"
 
 import { cn } from "@/lib/utils"
 
 function Card({ className, ...props }: React.ComponentProps<"div">) {
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <div
       data-slot="card"
       className={cn(
-        "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm",
+        "text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm",
         className
       )}
+      style={{
+        backgroundColor: mounted ? (theme === 'dark' ? '#1f2937' : 'white') : 'white',
+      }}
       {...props}
     />
   )

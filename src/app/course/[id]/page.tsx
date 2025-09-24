@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { useTheme } from '@/context/themecontext';
 import { useCourseStore } from '@/store/courseStore';
 import { useAuthStore } from '@/store/authStore';
 import { courseService } from '@/services/courseService';
 import { Button } from '@/components/ui/button';
+import { BackToHome } from '@/components/ui/BackToHome';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
@@ -30,9 +32,15 @@ export default function CourseDetailPage() {
 
   const { courseDetail, loading, error, fetchCourseDetail, clearCourseDetail } = useCourseStore();
   const { user, isAuthenticated } = useAuthStore();
+  const { theme } = useTheme();
 
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [enrollmentLoading, setEnrollmentLoading] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (courseId) {
@@ -114,18 +122,23 @@ export default function CourseDetailPage() {
           <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/20">
             <XCircle className="h-6 w-6 text-red-600 dark:text-red-400" />
           </div>
-          <h3 className="mt-4 text-lg font-medium text-gray-900 dark:text-white">Course not found</h3>
-          <p className="mt-2 text-gray-600 dark:text-gray-400">
+          <h3
+            className="mt-4 text-lg font-medium"
+            style={{
+              color: mounted ? (theme === 'dark' ? 'white' : '#1f2937') : '#1f2937',
+            }}
+          >
+            Course not found
+          </h3>
+          <p
+            className="mt-2"
+            style={{
+              color: mounted ? (theme === 'dark' ? '#9ca3af' : '#6b7280') : '#6b7280',
+            }}
+          >
             {error || 'The course you are looking for does not exist.'}
           </p>
-          <Button
-            onClick={() => router.push('/')}
-            className="mt-4"
-            variant="outline"
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Home
-          </Button>
+          <BackToHome className="mt-4" />
         </div>
       </div>
     );

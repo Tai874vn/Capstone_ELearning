@@ -59,7 +59,7 @@ export function CourseCarousel({ courses, onCourseClick, title }: CourseCarousel
         </div>
       )}
 
-      <div className="overflow-hidden" ref={emblaRef}>
+      <div className="overflow-hidden p-6" ref={emblaRef}>
         <div className="flex">
           {courses.map((course) => (
             <div key={course.maKhoaHoc} className="flex-[0_0_100%] min-w-0 pl-4 sm:flex-[0_0_50%] lg:flex-[0_0_25%]">

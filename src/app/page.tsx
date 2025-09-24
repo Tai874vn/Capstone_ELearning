@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCourseStore } from '../store/courseStore';
 import { CourseCard } from '../components/ui/CourseCard';
-
+import  HeroSection  from '../components/ui/HeroSection'
 export default function HomePage() {
   const router = useRouter();
   const {
@@ -30,7 +30,7 @@ export default function HomePage() {
   return (
     <>
       {/* Hero Section */}
-      
+      <HeroSection></HeroSection>
 
       {/* Recent Courses Section */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

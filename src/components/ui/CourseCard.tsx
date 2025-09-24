@@ -1,5 +1,6 @@
 import React from 'react';
 import { Course } from '../../store/courseStore';
+import { useTheme } from '../../context/themecontext';
 
 interface CourseCardProps {
   course: Course;
@@ -7,9 +8,15 @@ interface CourseCardProps {
 }
 
 export function CourseCard({ course, onClick }: CourseCardProps) {
+  const { theme } = useTheme();
+
   return (
     <div
-      className="bg-card border border-border rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer"
+      className="border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer backdrop-blur-sm"
+      style={{
+        transition: 'all 0.3s ease',
+        backgroundColor: theme === 'dark' ? 'rgb(31, 41, 55)' : 'rgba(255, 255, 255, 0.95)'
+      }}
       onClick={() => onClick?.(course.maKhoaHoc)}
     >
       <div className="relative">

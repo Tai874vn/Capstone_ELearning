@@ -76,6 +76,25 @@ export const useAuthStore = create<AuthState>()(
             error: null
           });
         },
+
+        updateUserInfo: (userData: any) => {
+          const state = get();
+          if (state.user) {
+            const updatedUser = {
+              ...state.user,
+              hoTen: userData.hoTen,
+              email: userData.email,
+              soDT: userData.soDT,
+            };
+
+            // Update localStorage
+            localStorage.setItem('USER_INFO', JSON.stringify(updatedUser));
+
+            set({
+              user: updatedUser
+            });
+          }
+        },
       }),
       {
         name: 'auth-store',
@@ -84,15 +103,17 @@ export const useAuthStore = create<AuthState>()(
           isAuthenticated: state.isAuthenticated,
         }),
         onRehydrateStorage: () => (state) => {
-          // Check if token exists in localStorage and user is authenticated
+          // Check if token exists in localStorage
           const token = localStorage.getItem('ACCESS_TOKEN');
           const userInfo = localStorage.getItem('USER_INFO');
 
-          if (token && userInfo && state?.isAuthenticated) {
+          if (token && userInfo) {
             try {
               const user = JSON.parse(userInfo);
-              state.user = user;
-              state.isAuthenticated = true;
+              if (state) {
+                state.user = user;
+                state.isAuthenticated = true;
+              }
             } catch (error) {
               // Clear invalid data
               localStorage.removeItem('ACCESS_TOKEN');
@@ -101,6 +122,12 @@ export const useAuthStore = create<AuthState>()(
                 state.user = null;
                 state.isAuthenticated = false;
               }
+            }
+          } else {
+            // No valid tokens, ensure user is logged out
+            if (state) {
+              state.user = null;
+              state.isAuthenticated = false;
             }
           }
         },

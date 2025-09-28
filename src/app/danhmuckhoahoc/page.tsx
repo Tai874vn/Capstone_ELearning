@@ -201,8 +201,8 @@ export default function DanhMucKhoaHocPage() {
           </div>
         </div>
 
-        {/* Featured Courses Carousel */}
-        {!searchQuery && selectedCategory === 'all' && featuredCourses.length > 0 && (
+        {/* Featured Courses Carousel - Disabled */}
+        {/* {!searchQuery && selectedCategory === 'all' && featuredCourses.length > 0 && (
           <section className="mb-12">
             <CourseCarousel
               courses={featuredCourses}
@@ -210,7 +210,7 @@ export default function DanhMucKhoaHocPage() {
               title="Khóa Học Nổi Bật"
             />
           </section>
-        )}
+        )} */}
 
         {/* Current Filters Display */}
         <div className="mb-6 p-4 bg-muted rounded-lg">

@@ -37,7 +37,7 @@ export function CourseCarousel({ courses, onCourseClick, title }: CourseCarousel
     <div className="relative">
       {title && (
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{title}</h2>
+          <h2 className="text-2xl font-bold text-foreground">{title}</h2>
           <div className="flex space-x-2">
             <Button
               variant="outline"
@@ -76,7 +76,7 @@ export function CourseCarousel({ courses, onCourseClick, title }: CourseCarousel
         {Array.from({ length: Math.ceil(courses.length / 4) }).map((_, index) => (
           <button
             key={index}
-            className="w-2 h-2 rounded-full bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors"
+            className="w-2 h-2 rounded-full bg-muted hover:bg-muted/80 transition-colors"
             onClick={() => emblaApi?.scrollTo(index)}
           />
         ))}

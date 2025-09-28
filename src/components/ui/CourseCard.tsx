@@ -45,14 +45,14 @@ export function CourseCard({ course, onClick }: CourseCardProps) {
           <span>{course.luotXem} views</span>
         </div>
 
-        <div className="flex items-center justify-between">
+        {/* <div className="flex items-center justify-end">
           <span className="text-blue-600 dark:text-blue-400 font-semibold">
             {course.soLuongHocVien} students
           </span>
           <button className="bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer">
             View Course
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   );

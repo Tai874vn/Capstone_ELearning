@@ -4,44 +4,44 @@ export const registerFormSchema = z
   .object({
     username: z
       .string()
-      .min(3, { message: 'Username must be at least 3 characters long' })
-      .max(20, { message: 'Username must be less than 20 characters' })
+      .min(3, { message: 'Tên đăng nhập phải có ít nhất 3 ký tự' })
+      .max(20, { message: 'Tên đăng nhập phải ít hơn 20 ký tự' })
       .regex(/^[a-zA-Z0-9_]+$/, {
-        message: 'Username can only contain letters, numbers, and underscores'
+        message: 'Tên đăng nhập chỉ được chứa chữ cái, số và dấu gạch dưới'
       }),
     name: z
       .string()
-      .min(2, { message: 'Name must be at least 2 characters long' })
-      .max(50, { message: 'Name must be less than 50 characters' }),
+      .min(2, { message: 'Họ tên phải có ít nhất 2 ký tự' })
+      .max(50, { message: 'Họ tên phải ít hơn 50 ký tự' }),
     email: z
       .string()
-      .email({ message: 'Please enter a valid email address' }),
+      .email({ message: 'Vui lòng nhập địa chỉ email hợp lệ' }),
     phone: z
       .string()
-      .min(10, { message: 'Phone number must be at least 10 digits' })
+      .min(10, { message: 'Số điện thoại phải có ít nhất 10 chữ số' })
       .regex(/^\+\d{1,4}\d{7,14}$/, {
-        message: 'Please enter a valid phone number with country code'
+        message: 'Vui lòng nhập số điện thoại hợp lệ với mã quốc gia'
       }),
     password: z
       .string()
-      .min(8, { message: 'Password must be at least 8 characters long' })
+      .min(8, { message: 'Mật khẩu phải có ít nhất 8 ký tự' })
       .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, {
-        message: 'Password must contain at least one lowercase letter, one uppercase letter, and one number'
+        message: 'Mật khẩu phải chứa ít nhất một chữ thường, một chữ hoa và một số'
       }),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: 'Passwords do not match',
+    message: 'Mật Khẩu Không Khớp!',
     path: ['confirmPassword'],
   })
 
 export const loginFormSchema = z.object({
   username: z
     .string()
-    .min(1, { message: 'Username is required' }),
+    .min(1, { message: 'Tên Tài Khoản Không Được Để Trống!' }),
   password: z
     .string()
-    .min(1, { message: 'Password is required' }),
+    .min(1, { message: 'Mật Khẩu Không Được Để Trống!' }),
 })
 
 export type RegisterFormData = z.infer<typeof registerFormSchema>

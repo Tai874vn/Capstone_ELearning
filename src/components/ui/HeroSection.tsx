@@ -35,7 +35,7 @@ const HeroSection = () => {
               </div>
 
               {/* Play button */}
-              <button className="relative group w-32 h-32 bg-transparent border-4 border-yellow-400 rounded-full flex items-center justify-center hover:bg-yellow-400 transition-all duration-300 hover:scale-110">
+              <button className="relative group w-32 h-32 bg-transparent border-4 border-yellow-400 rounded-full flex items-center justify-center hover:bg-yellow-400 transition-all duration-300 hover:scale-110 cursor-pointer">
                 <Play className="w-12 h-12 text-yellow-400 group-hover:text-black ml-1" fill="currentColor" />
               </button>
             </div>
@@ -58,10 +58,10 @@ const HeroSection = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-end">
-              <button className="px-8 py-3 bg-yellow-400 text-black font-semibold rounded-lg hover:bg-yellow-300 transition-colors duration-200 shadow-lg hover:shadow-xl">
+              <button className="px-8 py-3 bg-yellow-400 text-black font-semibold rounded-lg hover:bg-yellow-300 transition-colors duration-200 shadow-lg hover:shadow-xl cursor-pointer">
                 Xem khóa học
               </button>
-              <button className="px-8 py-3 bg-transparent border border-white text-white font-semibold rounded-lg hover:bg-white hover:text-black transition-colors duration-200">
+              <button className="px-8 py-3 bg-transparent border border-white text-white font-semibold rounded-lg hover:bg-white hover:text-black transition-colors duration-200 cursor-pointer">
                 Tư vấn học
               </button>
             </div>

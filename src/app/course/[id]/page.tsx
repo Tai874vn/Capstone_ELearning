@@ -165,9 +165,9 @@ export default function CourseDetailPage() {
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="max-w-4xl mx-auto">
         {/* Main Content */}
-        <div className="lg:col-span-2">
+        <div>
           {/* Course Header */}
           <div className="mb-8">
             <div className="aspect-video relative mb-6 overflow-hidden rounded-lg">
@@ -183,34 +183,68 @@ export default function CourseDetailPage() {
               </div>
             </div>
 
-            <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
               {courseDetail.tenKhoaHoc}
             </h1>
 
-            <div className="flex flex-wrap items-center gap-4 text-gray-600 dark:text-gray-400 mb-6">
+            <div className="flex flex-wrap items-center gap-4 text-muted-foreground mb-6">
               <div className="flex items-center">
                 <User className="h-4 w-4 mr-1" />
                 <span>By {courseDetail.nguoiTao.hoTen}</span>
               </div>
-              <div className="flex items-center">
+              {/* <div className="flex items-center">
                 <CalendarDays className="h-4 w-4 mr-1" />
                 <span>Created {formatDate(courseDetail.ngayTao)}</span>
-              </div>
+              </div> */}
               <div className="flex items-center">
                 <Eye className="h-4 w-4 mr-1" />
                 <span>{courseDetail.luotXem?.toLocaleString() || 0} views</span>
               </div>
-              <div className="flex items-center">
+              {/* <div className="flex items-center">
                 <Users className="h-4 w-4 mr-1" />
                 <span>{courseDetail.soLuongHocVien || 0} students</span>
-              </div>
+              </div> */}
               {courseDetail.danhGia && (
                 <div className="flex items-center">
                   <Star className="h-4 w-4 mr-1 text-yellow-500" />
-                  <span>{courseDetail.danhGia}/5 rating</span>
+                  <span>{courseDetail.danhGia}</span>
                 </div>
               )}
             </div>
+          </div>
+
+          {/* Enrollment Button */}
+          <div className="mb-8 flex justify-center">
+            <Button
+              onClick={handleEnrollment}
+              disabled={enrollmentLoading}
+              className={`px-8 py-4 text-lg font-semibold rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl ${
+                isEnrolled
+                  ? 'bg-red-600 hover:bg-red-700 text-white'
+                  : 'bg-green-600 hover:bg-green-700 text-white'
+              }`}
+            >
+              {enrollmentLoading ? (
+                <div className="flex items-center gap-2">
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                  {isEnrolled ? 'Đang hủy đăng ký...' : 'Đang đăng ký...'}
+                </div>
+              ) : (
+                <>
+                  {isEnrolled ? (
+                    <>
+                      <XCircle className="h-5 w-5 mr-2" />
+                      Hủy Đăng Ký
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle className="h-5 w-5 mr-2" />
+                      Đăng Ký Khóa Học
+                    </>
+                  )}
+                </>
+              )}
+            </Button>
           </div>
 
           {/* Course Description */}
@@ -223,15 +257,15 @@ export default function CourseDetailPage() {
             </CardHeader>
             <CardContent>
               <div className="prose prose-gray dark:prose-invert max-w-none">
-                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                <p className="text-muted-foreground leading-relaxed">
                   {courseDetail.moTa}
                 </p>
               </div>
             </CardContent>
           </Card>
 
-          {/* Students Section */}
-          {courseDetail.thongTinHocVien && courseDetail.thongTinHocVien.length > 0 && (
+          {/* Students Section - Disabled */}
+          {/* {courseDetail.thongTinHocVien && courseDetail.thongTinHocVien.length > 0 && (
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center">
@@ -244,7 +278,7 @@ export default function CourseDetailPage() {
                   {courseDetail.thongTinHocVien.slice(0, 12).map((student) => (
                     <div
                       key={student.taiKhoan}
-                      className="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                      className="flex items-center space-x-3 p-3 bg-muted rounded-lg"
                     >
                       <div className="flex-shrink-0">
                         <img
@@ -258,10 +292,10 @@ export default function CourseDetailPage() {
                         />
                       </div>
                       <div className="min-w-0">
-                        <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                        <p className="text-sm font-medium text-foreground truncate">
                           {student.hoTen}
                         </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                        <p className="text-xs text-muted-foreground truncate">
                           @{student.taiKhoan}
                         </p>
                       </div>
@@ -269,114 +303,13 @@ export default function CourseDetailPage() {
                   ))}
                 </div>
                 {courseDetail.thongTinHocVien.length > 12 && (
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-4 text-center">
+                  <p className="text-sm text-muted-foreground mt-4 text-center">
                     And {courseDetail.thongTinHocVien.length - 12} more students...
                   </p>
                 )}
               </CardContent>
             </Card>
-          )}
-        </div>
-
-        {/* Sidebar */}
-        <div className="lg:col-span-1">
-          <div className="sticky top-8">
-            <Card>
-              <CardContent className="p-6">
-                <div className="text-center mb-6">
-                  <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2">
-                    Free
-                  </div>
-                  <p className="text-gray-600 dark:text-gray-400">
-                    Access to all course materials
-                  </p>
-                </div>
-
-                <Button
-                  onClick={handleEnrollment}
-                  disabled={enrollmentLoading}
-                  className={`w-full mb-4 ${
-                    isEnrolled
-                      ? 'bg-red-600 hover:bg-red-700 text-white'
-                      : 'bg-blue-600 hover:bg-blue-700 text-white'
-                  }`}
-                >
-                  {enrollmentLoading ? (
-                    <div className="flex items-center">
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                      {isEnrolled ? 'Unenrolling...' : 'Enrolling...'}
-                    </div>
-                  ) : (
-                    <div className="flex items-center">
-                      {isEnrolled ? (
-                        <>
-                          <XCircle className="h-4 w-4 mr-2" />
-                          Unenroll from Course
-                        </>
-                      ) : (
-                        <>
-                          <CheckCircle className="h-4 w-4 mr-2" />
-                          Enroll Now
-                        </>
-                      )}
-                    </div>
-                  )}
-                </Button>
-
-                {isEnrolled && (
-                  <div className="flex items-center justify-center text-green-600 dark:text-green-400 text-sm mb-4">
-                    <CheckCircle className="h-4 w-4 mr-1" />
-                    You are enrolled in this course
-                  </div>
-                )}
-
-                <div className="space-y-4 text-sm">
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">Level:</span>
-                    <Badge variant="outline">All Levels</Badge>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">Duration:</span>
-                    <span className="font-medium">Self-paced</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">Language:</span>
-                    <span className="font-medium">English</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">Certificate:</span>
-                    <span className="font-medium">Yes</span>
-                  </div>
-                </div>
-
-                <hr className="my-6" />
-
-                <div className="space-y-3">
-                  <h4 className="font-semibold text-gray-900 dark:text-white">
-                    What you'll learn:
-                  </h4>
-                  <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
-                    <li className="flex items-start">
-                      <CheckCircle className="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      Core concepts and fundamentals
-                    </li>
-                    <li className="flex items-start">
-                      <CheckCircle className="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      Practical hands-on experience
-                    </li>
-                    <li className="flex items-start">
-                      <CheckCircle className="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      Real-world applications
-                    </li>
-                    <li className="flex items-start">
-                      <CheckCircle className="h-4 w-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                      Industry best practices
-                    </li>
-                  </ul>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+          )} */}
         </div>
       </div>
     </div>

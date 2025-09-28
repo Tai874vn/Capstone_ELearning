@@ -29,6 +29,16 @@ export interface UserRegister {
   email: string;
 }
 
+export interface UpdateUserRequest {
+  taiKhoan: string;
+  matKhau: string;
+  hoTen: string;
+  soDT: string;
+  maLoaiNguoiDung: string;
+  maNhom: string;
+  email: string;
+}
+
 export interface AuthUser {
   taiKhoan: string;
   hoTen: string;
@@ -126,6 +136,7 @@ export interface AuthState {
   login: (credentials: UserLogin) => Promise<void>;
   register: (userData: UserRegister) => Promise<void>;
   logout: () => void;
+  updateUserInfo: (userData: any) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
   clearError: () => void;

@@ -71,8 +71,6 @@ export const useCourseStore = create<CourseState>()(
           const response = await api.get(`/QuanLyKhoaHoc/LayKhoaHocTheoDanhMuc?maDanhMuc=${categoryCode}&MaNhom=${groupCode}`);
 
           const courses = Array.isArray(response.data) ? response.data : [];
-
-          // Client-side pagination for category filtering since API doesn't support pagination for this endpoint
           const startIndex = (page - 1) * pageSize;
           const endIndex = startIndex + pageSize;
           const paginatedCourses = courses.slice(startIndex, endIndex);
@@ -131,8 +129,6 @@ export const useCourseStore = create<CourseState>()(
 
           // Calculate total pages
           const totalPages = Math.ceil(totalCount / pageSize);
-
-          // Sort courses by views (luotXem) in descending order for featured courses (only if on first page)
           const sortedByViews = page === 1 ? [...courses].sort((a, b) => (b.luotXem || 0) - (a.luotXem || 0)) : [];
 
           set({

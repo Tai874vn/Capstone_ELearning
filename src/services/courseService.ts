@@ -36,7 +36,9 @@ export const courseService = {
   },
 
   async getEnrolledCourses(userAccount: string): Promise<Course[]> {
-    const response = await api.get(`/QuanLyKhoaHoc/LayThongTinHocVienKhoaHoc?taiKhoan=${userAccount}`);
-    return response.data;
+    const response = await api.post('/QuanLyNguoiDung/ThongTinNguoiDung', {
+      taiKhoan: userAccount
+    });
+    return response.data.chiTietKhoaHocGhiDanh || [];
   },
 };

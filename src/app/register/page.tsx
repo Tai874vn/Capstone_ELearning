@@ -52,37 +52,42 @@ export default function RegisterPreview() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      // Transform form data to match API expected structure
       const registrationData = {
         taiKhoan: values.username,
         matKhau: values.password,
         hoTen: values.name,
         soDT: values.phone,
         email: values.email,
-        maNhom: 'GP01' // Default group
+        maNhom: 'GP01'
       }
 
       await register(registrationData)
 
-      toast.success('Registration successful! You can now login.')
+      toast.success('Đăng Ký Thành Công!.')
       router.push('/login')
     } catch (error: any) {
       console.error('Registration error:', error)
-      toast.error(error.message || 'Registration failed. Please try again.')
+      toast.error(error.message || 'Đăng Ký Thất Bại.')
     }
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-200px)] p-4">
-      {/* Header with back to home */}
-      <div className="w-full max-w-sm mb-8">
-        <BackToHome variant="link" className="font-medium" />
+    <div className="min-h-[calc(100vh-200px)] grid grid-cols-1 lg:grid-cols-2">
+      {/* Left side - Image */}
+      <div className="hidden lg:flex items-center justify-center bg-muted p-8">
+        <img
+          src="/login.png"
+          alt="Register"
+          className="w-3/4 h-3/4 object-cover rounded-2xl shadow-lg"
+        />
       </div>
-      <Card className="w-full max-w-sm shadow-xl">
+
+      {/* Right side - Form */}
+      <div className="flex flex-col items-center justify-center p-8">
+        <Card className="w-full max-w-sm shadow-xl">
         <CardHeader>
-          <CardTitle className="text-card-foreground text-xl">Create your account</CardTitle>
+          <CardTitle className="text-card-foreground text-xl">Đăng Ký</CardTitle>
           <CardDescription className="text-muted-foreground">
-            Enter your details below to create your account
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -95,11 +100,11 @@ export default function RegisterPreview() {
                   name="username"
                   render={({ field }) => (
                     <FormItem className="grid gap-2">
-                      <FormLabel htmlFor="username" className="text-card-foreground font-medium">Username</FormLabel>
+                      <FormLabel htmlFor="username" className="text-card-foreground font-medium">Tên Tài Khoản</FormLabel>
                       <FormControl>
                         <Input
                           id="username"
-                          placeholder="john_doe"
+                          placeholder="NguyenVanA123"
                           className=""
                           {...field}
                         />
@@ -115,11 +120,11 @@ export default function RegisterPreview() {
                   name="name"
                   render={({ field }) => (
                     <FormItem className="grid gap-2">
-                      <FormLabel htmlFor="name" className="text-card-foreground font-medium">Full Name</FormLabel>
+                      <FormLabel htmlFor="name" className="text-card-foreground font-medium">Họ Tên</FormLabel>
                       <FormControl>
                         <Input
                           id="name"
-                          placeholder="John Doe"
+                          placeholder="Nguyễn Văn A"
                           className=""
                           {...field}
                         />
@@ -139,7 +144,7 @@ export default function RegisterPreview() {
                       <FormControl>
                         <Input
                           id="email"
-                          placeholder="m@example.com"
+                          placeholder="NguyenVanA@example.com"
                           type="email"
                           autoComplete="email"
                           className=""
@@ -157,7 +162,7 @@ export default function RegisterPreview() {
                   name="phone"
                   render={({ field }) => (
                     <FormItem className="grid gap-2">
-                      <FormLabel htmlFor="phone" className="text-card-foreground font-medium">Phone Number</FormLabel>
+                      <FormLabel htmlFor="phone" className="text-card-foreground font-medium">Số Điện Thoại</FormLabel>
                       <FormControl>
                         <PhoneInput {...field} defaultCountry="TR" />
                       </FormControl>
@@ -172,11 +177,11 @@ export default function RegisterPreview() {
                   name="password"
                   render={({ field }) => (
                     <FormItem className="grid gap-2">
-                      <FormLabel htmlFor="password" className="text-card-foreground font-medium">Password</FormLabel>
+                      <FormLabel htmlFor="password" className="text-card-foreground font-medium">Mật Khẩu</FormLabel>
                       <FormControl>
                         <PasswordInput
                           id="password"
-                          placeholder="******"
+                          placeholder=""
                           autoComplete="new-password"
                           {...field}
                         />
@@ -193,12 +198,12 @@ export default function RegisterPreview() {
                   render={({ field }) => (
                     <FormItem className="grid gap-2">
                       <FormLabel htmlFor="confirmPassword" className="text-card-foreground font-medium">
-                        Confirm Password
+                        Xác Nhận Mật Khẩu
                       </FormLabel>
                       <FormControl>
                         <PasswordInput
                           id="confirmPassword"
-                          placeholder="******"
+                          placeholder=""
                           autoComplete="new-password"
                           {...field}
                         />
@@ -211,23 +216,24 @@ export default function RegisterPreview() {
             </form>
           </Form>
         </CardContent>
-        <CardFooter className="flex-col gap-2">
+        <CardFooter className="flex-col gap-2 pt-6">
           <Button
             type="submit"
             disabled={loading}
-            className="w-full font-medium"
+            className="w-full font-medium bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg cursor-pointer shadow-lg hover:shadow-xl transition-all duration-200"
             onClick={form.handleSubmit(onSubmit)}
           >
-            {loading ? 'Registering...' : 'Register'}
+            {loading ? 'Đang Đăng Ký...' : 'Đăng Ký'}
           </Button>
           <div className="text-center text-sm text-muted-foreground">
-            Already have an account?{' '}
+            Đã Có Tài Khoản?{' '}
             <Link href="/login" className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 underline-offset-4 hover:underline">
-              Login
+              Đăng Nhập
             </Link>
           </div>
         </CardFooter>
       </Card>
+      </div>
     </div>
   )
 }

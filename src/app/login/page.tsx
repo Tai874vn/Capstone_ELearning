@@ -52,7 +52,7 @@ export default function LoginPage() {
       clearError();
       // Convert email to account format for API
       await login({
-        taiKhoan: data.email, // API expects taiKhoan field
+        taiKhoan: data.username, // API expects taiKhoan field
         matKhau: data.password,
       });
       toast.success('Login successful!');
@@ -63,22 +63,27 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-200px)] p-4">
-      {/* Header with back to home */}
-      <div className="w-full max-w-sm mb-8">
-        <BackToHome variant="link" className="font-medium" />
+    <div className="min-h-[calc(100vh-200px)] grid grid-cols-1 lg:grid-cols-2">
+      {/* Left side - Image */}
+      <div className="hidden lg:flex items-center justify-center bg-muted p-8">
+        <img
+          src="/login.png"
+          alt="Login"
+          className="w-3/4 h-3/4 object-cover rounded-2xl shadow-lg"
+        />
       </div>
 
-      <Card className="w-full max-w-sm shadow-xl">
+      {/* Right side - Form */}
+      <div className="flex flex-col items-center justify-center p-8">
+        <Card className="w-full max-w-sm shadow-xl">
         <CardHeader>
-          <CardTitle className="text-card-foreground text-xl">Login to your account</CardTitle>
-          <CardDescription className="text-muted-foreground">
-            Enter your credentials below to login to your account
+          <CardTitle className="text-card-foreground text-xl">Đăng Nhập</CardTitle>
+          <CardDescription>
           </CardDescription>
           <CardAction>
             <Link href="/register">
-              <Button variant="link" className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">
-                Sign Up
+              <Button variant="link" className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 cursor-pointer">
+                Đăng ký
               </Button>
             </Link>
           </CardAction>
@@ -89,29 +94,29 @@ export default function LoginPage() {
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
                 <Label htmlFor="email" className="text-card-foreground font-medium">
-                  Email/Username
+                  Tên Đăng Nhập
                 </Label>
                 <Input
                   id="email"
-                  {...register('email')}
+                  {...register('username')}
                   type="text"
-                  placeholder="your-email@example.com"
+                  placeholder=""
                 />
-                {errors.email && (
-                  <p className="text-destructive text-sm mt-1">{errors.email.message}</p>
+                {errors.username && (
+                  <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.username.message}</p>
                 )}
               </div>
 
               <div className="grid gap-2">
                 <div className="flex items-center">
                   <Label htmlFor="password" className="text-card-foreground font-medium">
-                    Password
+                    Mật Khẩu
                   </Label>
                   <Link
                     href="#"
                     className="ml-auto inline-block text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 underline-offset-4 hover:underline"
                   >
-                    Forgot your password?
+                    Quên Mật Khẩu?
                   </Link>
                 </div>
                 <div className="relative">
@@ -139,30 +144,31 @@ export default function LoginPage() {
                   </button>
                 </div>
                 {errors.password && (
-                  <p className="text-destructive text-sm mt-1">{errors.password.message}</p>
+                  <p className="text-red-600 dark:text-red-400 text-sm mt-1">{errors.password.message}</p>
                 )}
               </div>
             </div>
           </CardContent>
 
-          <CardFooter className="flex-col gap-2">
+          <CardFooter className="flex-col gap-2 pt-6">
             <Button
               type="submit"
               disabled={loading}
-              className="w-full font-medium"
+              className="w-full font-medium bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg cursor-pointer shadow-lg hover:shadow-xl transition-all duration-200"
             >
               {loading ? (
                 <div className="flex items-center gap-2">
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                  Logging in...
+                  Đang Đăng Nhập...
                 </div>
               ) : (
-                'Login'
+                'Đăng Nhập'
               )}
             </Button>
           </CardFooter>
         </form>
       </Card>
+      </div>
     </div>
   );
 }

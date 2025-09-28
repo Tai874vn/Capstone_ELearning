@@ -16,6 +16,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
+import { CourseCard } from '@/components/ui/CourseCard';
 import { Search, Eye, Star, BookOpen, XCircle } from 'lucide-react';
 import type { Course } from '@/types/Index';
 
@@ -46,6 +47,8 @@ export default function ProfilePage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [coursesLoading, setCoursesLoading] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [coursesPerPage] = useState(3);
 
   const {
     register,
@@ -87,7 +90,15 @@ export default function ProfilePage() {
     } else {
       setFilteredCourses(enrolledCourses);
     }
+    // Reset to first page when search changes
+    setCurrentPage(1);
   }, [searchTerm, enrolledCourses]);
+
+  // Calculate pagination
+  const indexOfLastCourse = currentPage * coursesPerPage;
+  const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
+  const currentCourses = filteredCourses.slice(indexOfFirstCourse, indexOfLastCourse);
+  const totalPages = Math.ceil(filteredCourses.length / coursesPerPage);
 
   const loadUserInfo = async () => {
     if (!user) return;
@@ -132,7 +143,14 @@ export default function ProfilePage() {
     }
   };
 
-  const handleUnenroll = async (courseCode: string) => {
+  const handleCourseClick = (courseId: string) => {
+    router.push(`/course/${courseId}`);
+  };
+
+  const handleUnenroll = async (courseCode: string, event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+
     if (!user) return;
 
     try {
@@ -384,65 +402,74 @@ export default function ProfilePage() {
                   </p>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {filteredCourses.map((course) => (
-                    <Card key={course.maKhoaHoc} className="group hover:shadow-xl transition-all duration-300 border-0 shadow-md bg-card">
-                      <div className="aspect-video relative overflow-hidden rounded-t-lg">
-                        <img
-                          src={course.hinhAnh}
-                          alt={course.tenKhoaHoc}
-                          className="w-full h-full object-cover"
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {currentCourses.map((course) => (
+                      <div key={course.maKhoaHoc} className="relative">
+                        <CourseCard
+                          course={course}
+                          onClick={handleCourseClick}
                         />
-                        <div className="absolute top-4 left-4">
-                          <Badge variant="secondary" className="bg-blue-600 text-white font-medium">
-                            {course.danhMucKhoaHoc?.tenDanhMucKhoaHoc}
-                          </Badge>
-                        </div>
-                        <div className="absolute top-4 right-4">
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={(e) => handleUnenroll(course.maKhoaHoc, e)}
+                          className="absolute top-2 right-2 z-10 h-8 w-8 p-0 bg-red-500 hover:bg-red-600 shadow-lg cursor-pointer"
+                        >
+                          <XCircle className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Pagination Controls */}
+                  {totalPages > 1 && (
+                    <div className="flex items-center justify-center gap-2 mt-8">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                        disabled={currentPage === 1}
+                        className="px-3 py-2"
+                      >
+                        Trước
+                      </Button>
+
+                      <div className="flex items-center gap-1">
+                        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                           <Button
-                            variant="destructive"
+                            key={page}
+                            variant={currentPage === page ? "default" : "outline"}
                             size="sm"
-                            onClick={() => handleUnenroll(course.maKhoaHoc)}
-                            className="h-8 w-8 p-0 bg-red-500 hover:bg-red-600 shadow-lg cursor-pointer"
+                            onClick={() => setCurrentPage(page)}
+                            className={`min-w-[2.5rem] cursor-pointer ${
+                              currentPage === page
+                                ? 'bg-blue-600 text-white hover:bg-blue-700'
+                                : ''
+                            }`}
                           >
-                            <XCircle className="h-4 w-4" />
+                            {page}
                           </Button>
-                        </div>
+                        ))}
                       </div>
 
-                      <CardContent className="p-6 space-y-4">
-                        <div>
-                          <h3 className="font-bold text-xl mb-2 text-foreground line-clamp-2 leading-tight">
-                            {course.tenKhoaHoc}
-                          </h3>
-                          <p className="text-muted-foreground text-sm line-clamp-3 leading-relaxed">
-                            {course.moTa}
-                          </p>
-                        </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                        disabled={currentPage === totalPages}
+                        className="px-3 py-2"
+                      >
+                        Sau
+                      </Button>
+                    </div>
+                  )}
 
-                        <div className="flex items-center justify-between text-sm">
-                          <div className="flex items-center text-muted-foreground">
-                            <Eye className="h-4 w-4 mr-1" />
-                            <span>{course.luotXem?.toLocaleString() || 0} lượt xem</span>
-                          </div>
-                          {course.danhGia && (
-                            <div className="flex items-center">
-                              <Star className="h-4 w-4 mr-1 text-yellow-500 fill-current" />
-                              <span className="text-foreground font-medium">{course.danhGia}</span>
-                            </div>
-                          )}
-                        </div>
-
-                        <Link href={`/course/${course.maKhoaHoc}`} className="block">
-                          <Button className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5 cursor-pointer">
-                            <BookOpen className="h-4 w-4 mr-2" />
-                            Xem Chi Tiết
-                          </Button>
-                        </Link>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
+                  {/* Course Count Info */}
+                  <div className="text-center text-sm text-muted-foreground mt-4">
+                    Hiển thị {indexOfFirstCourse + 1}-{Math.min(indexOfLastCourse, filteredCourses.length)} trong tổng số {filteredCourses.length} khóa học
+                  </div>
+                </>
               )}
             </CardContent>
           </Card>

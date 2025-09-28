@@ -206,8 +206,8 @@ export default function CourseDetailPage() {
               </div> */}
               {courseDetail.danhGia && (
                 <div className="flex items-center">
-                  <Star className="h-4 w-4 mr-1 text-yellow-500" />
-                  <span>{courseDetail.danhGia}</span>
+                  <Star className="h-4 w-4 mr-1 text-yellow-500 fill-current" />
+                  <span className="font-medium">{courseDetail.danhGia}</span>
                 </div>
               )}
             </div>

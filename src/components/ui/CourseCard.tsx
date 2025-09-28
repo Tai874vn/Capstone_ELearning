@@ -1,6 +1,7 @@
 import React from 'react';
 import { Course } from '../../store/courseStore';
 import { useTheme } from '../../context/themecontext';
+import { Star, Eye } from 'lucide-react';
 
 interface CourseCardProps {
   course: Course;
@@ -12,11 +13,7 @@ export function CourseCard({ course, onClick }: CourseCardProps) {
 
   return (
     <div
-      className="border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer backdrop-blur-sm"
-      style={{
-        transition: 'all 0.3s ease',
-        backgroundColor: theme === 'dark' ? 'rgb(31, 41, 55)' : 'rgba(255, 255, 255, 0.95)'
-      }}
+      className="border border-border rounded-lg shadow-lg overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer backdrop-blur-sm bg-card"
       onClick={() => onClick?.(course.maKhoaHoc)}
     >
       <div className="relative">
@@ -27,7 +24,7 @@ export function CourseCard({ course, onClick }: CourseCardProps) {
           loading="lazy"
         />
         <div className="absolute top-2 right-2 bg-blue-600 text-white px-2 py-1 rounded text-sm">
-          {course.danhMucKhoaHoc.tenDanhMucKhoaHoc}
+          {course.danhMucKhoaHoc?.tenDanhMucKhoaHoc || 'Chưa phân loại'}
         </div>
       </div>
 
@@ -41,8 +38,19 @@ export function CourseCard({ course, onClick }: CourseCardProps) {
         </p>
 
         <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
-          <span>By {course.nguoiTao.hoTen}</span>
-          <span>{course.luotXem} views</span>
+          <span>By {course.nguoiTao?.hoTen || 'Unknown'}</span>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center">
+              <Eye className="h-4 w-4 mr-1" />
+              <span>{course.luotXem?.toLocaleString() || 0}</span>
+            </div>
+            {course.danhGia && (
+              <div className="flex items-center">
+                <Star className="h-4 w-4 mr-1 text-yellow-500 fill-current" />
+                <span className="font-medium text-card-foreground">{course.danhGia}</span>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* <div className="flex items-center justify-end">

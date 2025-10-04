@@ -46,3 +46,68 @@ export const loginFormSchema = z.object({
 
 export type RegisterFormData = z.infer<typeof registerFormSchema>
 export type LoginFormData = z.infer<typeof loginFormSchema>
+
+// Admin User Management Schemas
+export const adminUserSchema = z.object({
+  taiKhoan: z
+    .string()
+    .min(3, { message: 'Tài khoản phải có ít nhất 3 ký tự' })
+    .max(20, { message: 'Tài khoản không được quá 20 ký tự' }),
+  matKhau: z
+    .string()
+    .min(6, { message: 'Mật khẩu phải có ít nhất 6 ký tự' }),
+  hoTen: z
+    .string()
+    .min(2, { message: 'Họ tên phải có ít nhất 2 ký tự' })
+    .max(50, { message: 'Họ tên không được quá 50 ký tự' }),
+  email: z
+    .string()
+    .email({ message: 'Email không hợp lệ' }),
+  soDT: z
+    .string()
+    .min(10, { message: 'Số điện thoại phải có ít nhất 10 số' })
+    .max(11, { message: 'Số điện thoại không được quá 11 số' }),
+  maLoaiNguoiDung: z
+    .string()
+    .min(1, { message: 'Vui lòng chọn loại người dùng' }),
+  maNhom: z.string().default('GP01'),
+});
+
+// Admin Course Management Schemas
+export const adminCourseSchema = z.object({
+  maKhoaHoc: z
+    .string()
+    .min(3, { message: 'Mã khóa học phải có ít nhất 3 ký tự' })
+    .max(20, { message: 'Mã khóa học không được quá 20 ký tự' }),
+  tenKhoaHoc: z
+    .string()
+    .min(3, { message: 'Tên khóa học phải có ít nhất 3 ký tự' })
+    .max(100, { message: 'Tên khóa học không được quá 100 ký tự' }),
+  biDanh: z
+    .string()
+    .min(3, { message: 'Bí danh phải có ít nhất 3 ký tự' }),
+  moTa: z
+    .string()
+    .min(10, { message: 'Mô tả phải có ít nhất 10 ký tự' }),
+  luotXem: z
+    .number()
+    .min(0, { message: 'Lượt xem không được âm' })
+    .default(0),
+  danhGia: z
+    .number()
+    .min(0, { message: 'Đánh giá không được âm' })
+    .max(5, { message: 'Đánh giá không được quá 5' })
+    .default(0),
+  hinhAnh: z
+    .string()
+    .min(1, { message: 'Vui lòng chọn hình ảnh' }),
+  maNhom: z.string().default('GP01'),
+  ngayTao: z.string(),
+  maDanhMucKhoaHoc: z
+    .string()
+    .min(1, { message: 'Vui lòng chọn danh mục khóa học' }),
+  taiKhoanNguoiTao: z.string(),
+});
+
+export type AdminUserFormData = z.infer<typeof adminUserSchema>
+export type AdminCourseFormData = z.infer<typeof adminCourseSchema>

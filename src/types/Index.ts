@@ -39,6 +39,29 @@ export interface UpdateUserRequest {
   email: string;
 }
 
+export interface CreateUserRequest {
+  taiKhoan: string;
+  matKhau: string;
+  hoTen: string;
+  soDT: string;
+  maLoaiNguoiDung: string;
+  maNhom: string;
+  email: string;
+}
+
+export interface UserListResponse {
+  currentPage: number;
+  count: number;
+  totalPage: number;
+  totalCount: number;
+  items: User[];
+}
+
+export interface UserType {
+  maLoaiNguoiDung: string;
+  tenLoaiNguoiDung: string;
+}
+
 export interface AuthUser {
   taiKhoan: string;
   hoTen: string;
@@ -76,6 +99,59 @@ export interface Course {
 export interface CourseDetail extends Course {
   soLuongHocVien: number;
   thongTinHocVien?: StudentInfo[];
+}
+
+export interface CreateCourseRequest {
+  maKhoaHoc: string;
+  biDanh: string;
+  tenKhoaHoc: string;
+  moTa: string;
+  luotXem: number;
+  danhGia: number;
+  hinhAnh: string;
+  maNhom: string;
+  ngayTao: string;
+  maDanhMucKhoaHoc: string;
+  taiKhoanNguoiTao: string;
+}
+
+export interface UpdateCourseRequest {
+  maKhoaHoc: string;
+  biDanh: string;
+  tenKhoaHoc: string;
+  moTa: string;
+  luotXem: number;
+  danhGia: number;
+  hinhAnh: string;
+  maNhom: string;
+  ngayTao: string;
+  maDanhMucKhoaHoc: string;
+  taiKhoanNguoiTao: string;
+}
+
+export interface CourseListResponse {
+  currentPage: number;
+  count: number;
+  totalPage: number;
+  totalCount: number;
+  items: Course[];
+}
+
+export interface EnrollmentRequest {
+  maKhoaHoc: string;
+  taiKhoan: string;
+}
+
+export interface PendingStudent {
+  taiKhoan: string;
+  hoTen: string;
+  biDanh: string;
+}
+
+export interface ApprovedStudent {
+  taiKhoan: string;
+  hoTen: string;
+  biDanh: string;
 }
 
 export interface StudentInfo {

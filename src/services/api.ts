@@ -4,7 +4,6 @@ import { API_CONFIG } from '../configs/api';
 const api = axios.create({
   baseURL: API_CONFIG.BASE_URL,
   headers: {
-    'TokenCybersoft': API_CONFIG.TOKEN_CYBERSOFT,
     'Content-Type': 'application/json',
   }
 });
@@ -17,21 +16,20 @@ if (typeof window !== 'undefined') {
 
 api.interceptors.request.use(
   (config) => {
-    // Ensure TokenCybersoft is always present
-    if (!config.headers['TokenCybersoft']) {
-      config.headers['TokenCybersoft'] = API_CONFIG.TOKEN_CYBERSOFT;
-    }
+    // Set TokenCybersoft header
+    config.headers.set('TokenCybersoft', API_CONFIG.TOKEN_CYBERSOFT);
 
     const token = localStorage.getItem('ACCESS_TOKEN');
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers.set('Authorization', `Bearer ${token}`);
     }
 
     // Log request details for debugging
     console.log('API Request:', {
       url: config.url,
-      hasTokenCybersoft: !!config.headers['TokenCybersoft'],
-      hasAuthorization: !!config.headers.Authorization
+      baseURL: config.baseURL,
+      TokenCybersoft: config.headers.get('TokenCybersoft'),
+      hasAuthorization: !!config.headers.get('Authorization')
     });
 
     return config;

@@ -1,12 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { toast } from 'sonner';
-import Link from 'next/link';
 import { useAuthStore } from '@/store/authStore';
 import { userService } from '@/services/userService';
 import { courseService } from '@/services/courseService';
@@ -15,9 +14,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
 import { CourseCard } from '@/components/ui/CourseCard';
-import { Search, Eye, Star, BookOpen, XCircle } from 'lucide-react';
+import { Search, BookOpen, XCircle } from 'lucide-react';
 import type { Course } from '@/types/Index';
 
 // Validation schema for profile update
@@ -41,7 +39,6 @@ export default function ProfilePage() {
   const router = useRouter();
   const { user, isAuthenticated, updateUserInfo } = useAuthStore();
   const [loading, setLoading] = useState(false);
-  const [userInfo, setUserInfo] = useState<any>(null);
   const [enrolledCourses, setEnrolledCourses] = useState<Course[]>([]);
   const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -54,7 +51,6 @@ export default function ProfilePage() {
     register,
     handleSubmit,
     formState: { errors },
-    setValue,
     reset
   } = useForm<ProfileFormData>({
     resolver: zodResolver(profileUpdateSchema),
@@ -77,7 +73,7 @@ export default function ProfilePage() {
     // Load user info from localStorage and API
     loadUserInfo();
     loadEnrolledCourses();
-  }, [isAuthenticated, router, isHydrated]);
+  }, [isAuthenticated, router, isHydrated, loadUserInfo, loadEnrolledCourses]);
 
   useEffect(() => {
     // Filter courses based on search term
@@ -100,14 +96,13 @@ export default function ProfilePage() {
   const currentCourses = filteredCourses.slice(indexOfFirstCourse, indexOfLastCourse);
   const totalPages = Math.ceil(filteredCourses.length / coursesPerPage);
 
-  const loadUserInfo = async () => {
+  const loadUserInfo = useCallback(async () => {
     if (!user) return;
 
     try {
       setLoading(true);
       // Get user info from API or use stored user data
       const userData = user;
-      setUserInfo(userData);
 
       // Populate form with user data
       reset({
@@ -125,9 +120,9 @@ export default function ProfilePage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user, reset]);
 
-  const loadEnrolledCourses = async () => {
+  const loadEnrolledCourses = useCallback(async () => {
     if (!user) return;
 
     try {
@@ -141,7 +136,7 @@ export default function ProfilePage() {
     } finally {
       setCoursesLoading(false);
     }
-  };
+  }, [user]);
 
   const handleCourseClick = (courseId: string) => {
     router.push(`/course/${courseId}`);
@@ -165,9 +160,9 @@ export default function ProfilePage() {
       await loadEnrolledCourses();
 
       toast.success('Hủy đăng ký khóa học thành công!');
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error unenrolling from course:', error);
-      toast.error(error.message || 'Hủy đăng ký thất bại');
+      toast.error((error as Error).message || 'Hủy đăng ký thất bại');
     }
   };
 
@@ -182,9 +177,9 @@ export default function ProfilePage() {
       updateUserInfo(data);
 
       toast.success('Cập nhật thông tin thành công!');
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error updating user info:', error);
-      toast.error(error.message || 'Cập nhật thông tin thất bại');
+      toast.error((error as Error).message || 'Cập nhật thông tin thất bại');
     } finally {
       setLoading(false);
     }

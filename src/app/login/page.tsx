@@ -1,12 +1,12 @@
 'use client';
 
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { BackToHome } from "@/components/ui/BackToHome";
 import {
   Card,
   CardAction,
@@ -57,7 +57,7 @@ export default function LoginPage() {
       });
       toast.success('Login successful!');
       router.push('/');
-    } catch (err) {
+    } catch {
       // Error is already handled in the store
     }
   };
@@ -66,10 +66,12 @@ export default function LoginPage() {
     <div className="min-h-[calc(100vh-200px)] grid grid-cols-1 lg:grid-cols-2">
       {/* Left side - Image */}
       <div className="hidden lg:flex items-center justify-center bg-muted p-8">
-        <img
+        <Image
           src="/login.png"
           alt="Login"
-          className="w-3/4 h-3/4 object-cover rounded-2xl shadow-lg"
+          width={600}
+          height={600}
+          className="object-cover rounded-2xl shadow-lg"
         />
       </div>
 

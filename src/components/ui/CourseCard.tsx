@@ -1,6 +1,6 @@
 import React from 'react';
+import Image from 'next/image';
 import { Course } from '../../store/courseStore';
-import { useTheme } from '../../context/themecontext';
 import { Star, Eye } from 'lucide-react';
 
 interface CourseCardProps {
@@ -9,18 +9,18 @@ interface CourseCardProps {
 }
 
 export function CourseCard({ course, onClick }: CourseCardProps) {
-  const { theme } = useTheme();
 
   return (
     <div
       className="border border-border rounded-lg shadow-lg overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer backdrop-blur-sm bg-white"
       onClick={() => onClick?.(course.maKhoaHoc)}
     >
-      <div className="relative">
-        <img
+      <div className="relative h-48">
+        <Image
           src={course.hinhAnh}
           alt={course.tenKhoaHoc}
-          className="w-full h-48 object-cover"
+          fill
+          className="object-cover"
           loading="lazy"
         />
         <div className="absolute top-2 right-2 bg-blue-600 text-white px-2 py-1 rounded text-sm">

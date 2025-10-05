@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -17,7 +18,6 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
-import { BackToHome } from '@/components/ui/BackToHome'
 import {
   Card,
   CardContent,
@@ -36,7 +36,7 @@ const formSchema = registerFormSchema
 
 export default function RegisterPreview() {
   const router = useRouter()
-  const { register, loading, error } = useAuthStore()
+  const { register, loading } = useAuthStore()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -65,9 +65,9 @@ export default function RegisterPreview() {
 
       toast.success('Đăng Ký Thành Công!.')
       router.push('/login')
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Registration error:', error)
-      toast.error(error.message || 'Đăng Ký Thất Bại.')
+      toast.error((error as Error).message || 'Đăng Ký Thất Bại.')
     }
   }
 
@@ -75,10 +75,12 @@ export default function RegisterPreview() {
     <div className="min-h-[calc(100vh-200px)] grid grid-cols-1 lg:grid-cols-2">
       {/* Left side - Image */}
       <div className="hidden lg:flex items-center justify-center bg-muted p-8">
-        <img
+        <Image
           src="/login.png"
           alt="Register"
-          className="w-3/4 h-3/4 object-cover rounded-2xl shadow-lg"
+          width={600}
+          height={600}
+          className="object-cover rounded-2xl shadow-lg"
         />
       </div>
 

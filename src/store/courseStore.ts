@@ -10,7 +10,7 @@ export const useCourseStore = create<CourseState>()(
       courseDetail: null,
       categories: [],
       featuredCourses: [],
-      loading: false,
+      loading: true,
       error: null,
       currentPage: 1,
       totalCount: 0,

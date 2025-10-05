@@ -13,7 +13,7 @@ export function CourseCard({ course, onClick }: CourseCardProps) {
 
   return (
     <div
-      className="border border-border rounded-lg shadow-lg overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer backdrop-blur-sm bg-card"
+      className="border border-border rounded-lg shadow-lg overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer backdrop-blur-sm bg-white"
       onClick={() => onClick?.(course.maKhoaHoc)}
     >
       <div className="relative">
@@ -29,15 +29,15 @@ export function CourseCard({ course, onClick }: CourseCardProps) {
       </div>
 
       <div className="p-6">
-        <h3 className="text-xl font-semibold text-card-foreground mb-2 line-clamp-2">
+        <h3 className="text-xl font-semibold text-gray-900 mb-2 line-clamp-2">
           {course.tenKhoaHoc}
         </h3>
 
-        <p className="text-muted-foreground mb-4 line-clamp-3">
+        <p className="text-gray-600 mb-4 line-clamp-3">
           {course.moTa}
         </p>
 
-        <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
+        <div className="flex items-center justify-between text-sm text-gray-600 mb-4">
           <span>By {course.nguoiTao?.hoTen || 'Unknown'}</span>
           <div className="flex items-center gap-3">
             <div className="flex items-center">
@@ -47,7 +47,7 @@ export function CourseCard({ course, onClick }: CourseCardProps) {
             {course.danhGia && (
               <div className="flex items-center">
                 <Star className="h-4 w-4 mr-1 text-yellow-500 fill-current" />
-                <span className="font-medium text-card-foreground">{course.danhGia}</span>
+                <span className="font-medium text-gray-900">{course.danhGia}</span>
               </div>
             )}
           </div>

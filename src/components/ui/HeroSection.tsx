@@ -16,9 +16,9 @@ const HeroSection = () => {
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4">
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-16 lg:gap-24">
           {/* Left content - Play button */}
-          <div className="flex-1 flex items-center justify-center">
+          <div className="flex-1 flex items-center justify-end pr-12">
             <div className="relative">
               {/* Animated pulse rings */}
               <div className="absolute inset-0 -inset-10">
@@ -42,8 +42,8 @@ const HeroSection = () => {
           </div>
 
           {/* Right content - Text and buttons */}
-          <div className="flex-1 text-center lg:text-right">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-yellow-400 mb-6 tracking-tight">
+          <div className="flex-1 text-left lg:pl-8">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-yellow-400 mb-6 tracking-tight leading-snug">
               KHỞI ĐẦU
               <br />
               SỰ NGHIỆP
@@ -57,7 +57,7 @@ const HeroSection = () => {
               chuyên nghiệp tại CyberSoft
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-end">
+            <div className="flex flex-col sm:flex-row gap-4 items-start">
               <button className="px-8 py-3 bg-yellow-400 text-black font-semibold rounded-lg hover:bg-yellow-300 transition-colors duration-200 shadow-lg hover:shadow-xl cursor-pointer">
                 Xem khóa học
               </button>

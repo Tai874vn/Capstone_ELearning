@@ -165,51 +165,61 @@ export default function CourseDetailPage() {
         </Link>
       </div>
 
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         {/* Main Content */}
         <div>
           {/* Course Header */}
-          <div className="mb-8">
-            <div className="aspect-video relative mb-6 overflow-hidden rounded-lg">
-              <img
-                src={courseDetail.hinhAnh}
-                alt={courseDetail.tenKhoaHoc}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute top-4 right-4">
-                <Badge variant="secondary" className="bg-blue-600 text-white">
-                  {courseDetail.danhMucKhoaHoc.tenDanhMucKhoaHoc}
-                </Badge>
-              </div>
-            </div>
-
-            <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
-              {courseDetail.tenKhoaHoc}
-            </h1>
-
-            <div className="flex flex-wrap items-center gap-4 text-muted-foreground mb-6">
-              <div className="flex items-center">
-                <User className="h-4 w-4 mr-1" />
-                <span>By {courseDetail.nguoiTao.hoTen}</span>
-              </div>
-              {/* <div className="flex items-center">
-                <CalendarDays className="h-4 w-4 mr-1" />
-                <span>Created {formatDate(courseDetail.ngayTao)}</span>
-              </div> */}
-              <div className="flex items-center">
-                <Eye className="h-4 w-4 mr-1" />
-                <span>{courseDetail.luotXem?.toLocaleString() || 0} views</span>
-              </div>
-              {/* <div className="flex items-center">
-                <Users className="h-4 w-4 mr-1" />
-                <span>{courseDetail.soLuongHocVien || 0} students</span>
-              </div> */}
-              {courseDetail.danhGia && (
-                <div className="flex items-center">
-                  <Star className="h-4 w-4 mr-1 text-yellow-500 fill-current" />
-                  <span className="font-medium">{courseDetail.danhGia}</span>
+          <div className="mb-8 bg-white rounded-lg shadow-lg overflow-hidden">
+            <div className="flex flex-col lg:flex-row">
+              {/* Left: Image */}
+              <div className="lg:w-2/5 relative">
+                <img
+                  src={courseDetail.hinhAnh}
+                  alt={courseDetail.tenKhoaHoc}
+                  className="w-full h-64 lg:h-full object-cover"
+                />
+                <div className="absolute top-4 right-4">
+                  <Badge variant="secondary" className="bg-blue-600 text-white">
+                    {courseDetail.danhMucKhoaHoc.tenDanhMucKhoaHoc}
+                  </Badge>
                 </div>
-              )}
+              </div>
+
+              {/* Right: Content */}
+              <div className="lg:w-3/5 p-6 lg:p-8">
+                <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+                  {courseDetail.tenKhoaHoc}
+                </h1>
+
+                <div className="flex flex-wrap items-center gap-4 text-gray-600 mb-6">
+                  <div className="flex items-center">
+                    <User className="h-4 w-4 mr-1" />
+                    <span>By {courseDetail.nguoiTao.hoTen}</span>
+                  </div>
+                  {/* <div className="flex items-center">
+                    <CalendarDays className="h-4 w-4 mr-1" />
+                    <span>Created {formatDate(courseDetail.ngayTao)}</span>
+                  </div> */}
+                  <div className="flex items-center">
+                    <Eye className="h-4 w-4 mr-1" />
+                    <span>{courseDetail.luotXem?.toLocaleString() || 0} views</span>
+                  </div>
+                  {/* <div className="flex items-center">
+                    <Users className="h-4 w-4 mr-1" />
+                    <span>{courseDetail.soLuongHocVien || 0} students</span>
+                  </div> */}
+                  {courseDetail.danhGia && (
+                    <div className="flex items-center">
+                      <Star className="h-4 w-4 mr-1 text-yellow-500 fill-current" />
+                      <span className="font-medium text-gray-900">{courseDetail.danhGia}</span>
+                    </div>
+                  )}
+                </div>
+
+                <p className="text-gray-700 leading-relaxed">
+                  {courseDetail.moTa}
+                </p>
+              </div>
             </div>
           </div>
 
@@ -247,22 +257,6 @@ export default function CourseDetailPage() {
             </Button>
           </div>
 
-          {/* Course Description */}
-          <Card className="mb-8">
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <BookOpen className="h-5 w-5 mr-2" />
-                About this course
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="prose prose-gray dark:prose-invert max-w-none">
-                <p className="text-muted-foreground leading-relaxed">
-                  {courseDetail.moTa}
-                </p>
-              </div>
-            </CardContent>
-          </Card>
 
           {/* Students Section - Disabled */}
           {/* {courseDetail.thongTinHocVien && courseDetail.thongTinHocVien.length > 0 && (

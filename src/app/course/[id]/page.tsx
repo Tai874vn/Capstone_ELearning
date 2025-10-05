@@ -93,8 +93,9 @@ export default function CourseDetailPage() {
         setIsEnrolled(true);
         toast.success('Successfully enrolled in course');
       }
-    } catch (error: any) {
-      const message = error.response?.data?.message ||
+    } catch (error: unknown) {
+      const err = error as { response?: { data?: { message?: string } } };
+      const message = err.response?.data?.message ||
         (isEnrolled ? 'Failed to unenroll from course' : 'Failed to enroll in course');
       toast.error(message);
     } finally {

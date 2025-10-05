@@ -78,8 +78,9 @@ export default function CourseForm({ course, onSuccess }: CourseFormProps) {
       toast.success("Thêm khóa học thành công!");
       onSuccess();
     },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Thêm khóa học thất bại!");
+    onError: (error: unknown) => {
+      const err = error as { response?: { data?: { message?: string } } };
+      toast.error(err.response?.data?.message || "Thêm khóa học thất bại!");
     },
   });
 
@@ -91,8 +92,9 @@ export default function CourseForm({ course, onSuccess }: CourseFormProps) {
       toast.success("Cập nhật khóa học thành công!");
       onSuccess();
     },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Cập nhật khóa học thất bại!");
+    onError: (error: unknown) => {
+      const err = error as { response?: { data?: { message?: string } } };
+      toast.error(err.response?.data?.message || "Cập nhật khóa học thất bại!");
     },
   });
 

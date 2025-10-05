@@ -70,7 +70,7 @@ export const adminUserSchema = z.object({
   maLoaiNguoiDung: z
     .string()
     .min(1, { message: 'Vui lòng chọn loại người dùng' }),
-  maNhom: z.string().default('GP01'),
+  maNhom: z.string(),
 });
 
 // Admin Course Management Schemas
@@ -91,17 +91,15 @@ export const adminCourseSchema = z.object({
     .min(10, { message: 'Mô tả phải có ít nhất 10 ký tự' }),
   luotXem: z
     .number()
-    .min(0, { message: 'Lượt xem không được âm' })
-    .default(0),
+    .min(0, { message: 'Lượt xem không được âm' }),
   danhGia: z
     .number()
     .min(0, { message: 'Đánh giá không được âm' })
-    .max(5, { message: 'Đánh giá không được quá 5' })
-    .default(0),
+    .max(5, { message: 'Đánh giá không được quá 5' }),
   hinhAnh: z
     .string()
     .min(1, { message: 'Vui lòng chọn hình ảnh' }),
-  maNhom: z.string().default('GP01'),
+  maNhom: z.string(),
   ngayTao: z.string(),
   maDanhMucKhoaHoc: z
     .string()

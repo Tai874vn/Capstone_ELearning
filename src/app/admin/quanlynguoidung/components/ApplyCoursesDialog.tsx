@@ -56,8 +56,9 @@ export default function ApplyCoursesDialog({ user }: ApplyCoursesDialogProps) {
       queryClient.invalidateQueries({ queryKey: ["approved-courses"] });
       toast.success("Ghi danh thành công!");
     },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Ghi danh thất bại!");
+    onError: (error: unknown) => {
+      const err = error as { response?: { data?: { message?: string } } };
+      toast.error(err.response?.data?.message || "Ghi danh thất bại!");
     },
   });
 
@@ -71,8 +72,9 @@ export default function ApplyCoursesDialog({ user }: ApplyCoursesDialogProps) {
       queryClient.invalidateQueries({ queryKey: ["approved-courses"] });
       toast.success("Hủy ghi danh thành công!");
     },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Hủy ghi danh thất bại!");
+    onError: (error: unknown) => {
+      const err = error as { response?: { data?: { message?: string } } };
+      toast.error(err.response?.data?.message || "Hủy ghi danh thất bại!");
     },
   });
 

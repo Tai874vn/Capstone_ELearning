@@ -82,9 +82,9 @@ export const useAuthStore = create<AuthState>()(
           if (state.user) {
             const updatedUser = {
               ...state.user,
-              hoTen: userData.hoTen,
-              email: userData.email,
-              soDT: userData.soDT,
+              ...(userData.hoTen !== undefined && { hoTen: userData.hoTen }),
+              ...(userData.email !== undefined && { email: userData.email }),
+              ...(userData.soDT !== undefined && { soDT: userData.soDT }),
             };
 
             // Update localStorage

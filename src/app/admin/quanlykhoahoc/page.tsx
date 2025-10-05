@@ -44,8 +44,9 @@ export default function QuanLyKhoaHocPage() {
       queryClient.invalidateQueries({ queryKey: ["admin-courses"] });
       toast.success("Xóa khóa học thành công!");
     },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Xóa khóa học thất bại!");
+    onError: (error: unknown) => {
+      const err = error as { response?: { data?: { message?: string } } };
+      toast.error(err.response?.data?.message || "Xóa khóa học thất bại!");
     },
   });
 

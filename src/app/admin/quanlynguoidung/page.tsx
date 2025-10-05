@@ -44,8 +44,9 @@ export default function QuanLyNguoiDungPage() {
       queryClient.invalidateQueries({ queryKey: ["admin-users"] });
       toast.success("Xóa người dùng thành công!");
     },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Xóa người dùng thất bại!");
+    onError: (error: unknown) => {
+      const err = error as { response?: { data?: { message?: string } } };
+      toast.error(err.response?.data?.message || "Xóa người dùng thất bại!");
     },
   });
 

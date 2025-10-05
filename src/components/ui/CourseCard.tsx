@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { Course } from '../../store/courseStore';
+import type { Course } from '../../types/Index';
 import { Star, Eye } from 'lucide-react';
 
 interface CourseCardProps {

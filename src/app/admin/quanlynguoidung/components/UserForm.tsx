@@ -61,8 +61,9 @@ export default function UserForm({ user, onSuccess }: UserFormProps) {
       toast.success("Thêm người dùng thành công!");
       onSuccess();
     },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Thêm người dùng thất bại!");
+    onError: (error: unknown) => {
+      const err = error as { response?: { data?: { message?: string } } };
+      toast.error(err.response?.data?.message || "Thêm người dùng thất bại!");
     },
   });
 
@@ -74,8 +75,9 @@ export default function UserForm({ user, onSuccess }: UserFormProps) {
       toast.success("Cập nhật người dùng thành công!");
       onSuccess();
     },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Cập nhật người dùng thất bại!");
+    onError: (error: unknown) => {
+      const err = error as { response?: { data?: { message?: string } } };
+      toast.error(err.response?.data?.message || "Cập nhật người dùng thất bại!");
     },
   });
 

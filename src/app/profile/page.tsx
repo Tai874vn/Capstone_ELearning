@@ -56,46 +56,6 @@ export default function ProfilePage() {
     resolver: zodResolver(profileUpdateSchema),
   });
 
-  useEffect(() => {
-    // Set hydrated to true after component mounts
-    setIsHydrated(true);
-  }, []);
-
-  useEffect(() => {
-    // Only check authentication after hydration is complete
-    if (!isHydrated) return;
-
-    if (!isAuthenticated) {
-      router.push('/login');
-      return;
-    }
-
-    // Load user info from localStorage and API
-    loadUserInfo();
-    loadEnrolledCourses();
-  }, [isAuthenticated, router, isHydrated, loadUserInfo, loadEnrolledCourses]);
-
-  useEffect(() => {
-    // Filter courses based on search term
-    if (searchTerm) {
-      const filtered = enrolledCourses.filter(course =>
-        course.tenKhoaHoc.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        course.moTa.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setFilteredCourses(filtered);
-    } else {
-      setFilteredCourses(enrolledCourses);
-    }
-    // Reset to first page when search changes
-    setCurrentPage(1);
-  }, [searchTerm, enrolledCourses]);
-
-  // Calculate pagination
-  const indexOfLastCourse = currentPage * coursesPerPage;
-  const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
-  const currentCourses = filteredCourses.slice(indexOfFirstCourse, indexOfLastCourse);
-  const totalPages = Math.ceil(filteredCourses.length / coursesPerPage);
-
   const loadUserInfo = useCallback(async () => {
     if (!user) return;
 
@@ -137,6 +97,46 @@ export default function ProfilePage() {
       setCoursesLoading(false);
     }
   }, [user]);
+
+  useEffect(() => {
+    // Set hydrated to true after component mounts
+    setIsHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    // Only check authentication after hydration is complete
+    if (!isHydrated) return;
+
+    if (!isAuthenticated) {
+      router.push('/login');
+      return;
+    }
+
+    // Load user info from localStorage and API
+    loadUserInfo();
+    loadEnrolledCourses();
+  }, [isAuthenticated, router, isHydrated, loadUserInfo, loadEnrolledCourses]);
+
+  useEffect(() => {
+    // Filter courses based on search term
+    if (searchTerm) {
+      const filtered = enrolledCourses.filter(course =>
+        course.tenKhoaHoc.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        course.moTa.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredCourses(filtered);
+    } else {
+      setFilteredCourses(enrolledCourses);
+    }
+    // Reset to first page when search changes
+    setCurrentPage(1);
+  }, [searchTerm, enrolledCourses]);
+
+  // Calculate pagination
+  const indexOfLastCourse = currentPage * coursesPerPage;
+  const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
+  const currentCourses = filteredCourses.slice(indexOfFirstCourse, indexOfLastCourse);
+  const totalPages = Math.ceil(filteredCourses.length / coursesPerPage);
 
   const handleCourseClick = (courseId: string) => {
     router.push(`/course/${courseId}`);

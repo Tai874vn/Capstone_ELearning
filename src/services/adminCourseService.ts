@@ -27,7 +27,7 @@ export const adminCourseService = {
     tenKhoaHoc: string = ''
   ): Promise<CourseListResponse> => {
     // Build params object
-    const params: any = {
+    const params: { MaNhom: string; tenKhoaHoc?: string } = {
       MaNhom: 'GP01'
     };
 
@@ -44,7 +44,7 @@ export const adminCourseService = {
 
     // Filter by course name if search term provided
     if (tenKhoaHoc && tenKhoaHoc.trim() !== '') {
-      allCourses = allCourses.filter((course: any) =>
+      allCourses = allCourses.filter((course: Course) =>
         course.tenKhoaHoc?.toLowerCase().includes(tenKhoaHoc.toLowerCase())
       );
     }
@@ -98,7 +98,7 @@ export const adminCourseService = {
   },
 
   // Upload course image
-  uploadCourseImage: async (formData: FormData): Promise<any> => {
+  uploadCourseImage: async (formData: FormData): Promise<{ message: string; url?: string }> => {
     const response = await api.post('/QuanLyKhoaHoc/UploadHinhAnhKhoaHoc', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',

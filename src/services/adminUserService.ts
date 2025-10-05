@@ -5,7 +5,6 @@ import type {
   CreateUserRequest,
   UpdateUserRequest,
   UserType,
-  EnrollmentRequest,
   Course
 } from '@/types/Index';
 
@@ -24,7 +23,7 @@ export const adminUserService = {
     pageSize: number = 10
   ): Promise<UserListResponse> => {
     // Build params object, only include tuKhoa if it has a value
-    const params: any = {
+    const params: { MaNhom: string; page: number; pageSize: number; tuKhoa?: string } = {
       MaNhom: maNhom,
       page: page,
       pageSize: pageSize
@@ -41,7 +40,14 @@ export const adminUserService = {
     // If response has pagination structure
     if (response.data && typeof response.data === 'object' && 'items' in response.data) {
       // API returns totalPages (plural), we need totalPage (singular)
-      const apiData = response.data as any;
+      const apiData = response.data as {
+        currentPage?: number;
+        count?: number;
+        totalPages?: number;
+        totalPage?: number;
+        totalCount?: number;
+        items?: User[]
+      };
       return {
         currentPage: apiData.currentPage || page,
         count: apiData.count || 0,

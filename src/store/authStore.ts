@@ -32,8 +32,8 @@ export const useAuthStore = create<AuthState>()(
               isAuthenticated: true,
               loading: false
             });
-          } catch (error: any) {
-            const errorMessage = error.response?.data?.message || 'Login failed';
+          } catch (error: unknown) {
+            const errorMessage = (error as { response?: { data?: { message?: string } } }).response?.data?.message || 'Login failed';
             set({
               error: errorMessage,
               loading: false,
@@ -57,8 +57,8 @@ export const useAuthStore = create<AuthState>()(
             await api.post('/QuanLyNguoiDung/DangKy', registrationData);
 
             set({ loading: false });
-          } catch (error: any) {
-            const errorMessage = error.response?.data?.message || 'Registration failed';
+          } catch (error: unknown) {
+            const errorMessage = (error as { response?: { data?: { message?: string } } }).response?.data?.message || 'Registration failed';
             set({
               error: errorMessage,
               loading: false
@@ -77,7 +77,7 @@ export const useAuthStore = create<AuthState>()(
           });
         },
 
-        updateUserInfo: (userData: any) => {
+        updateUserInfo: (userData: Partial<AuthUser>) => {
           const state = get();
           if (state.user) {
             const updatedUser = {
@@ -114,7 +114,7 @@ export const useAuthStore = create<AuthState>()(
                 state.user = user;
                 state.isAuthenticated = true;
               }
-            } catch (error) {
+            } catch {
               // Clear invalid data
               localStorage.removeItem('ACCESS_TOKEN');
               localStorage.removeItem('USER_INFO');

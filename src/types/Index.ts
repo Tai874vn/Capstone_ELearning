@@ -212,7 +212,7 @@ export interface AuthState {
   login: (credentials: UserLogin) => Promise<void>;
   register: (userData: UserRegister) => Promise<void>;
   logout: () => void;
-  updateUserInfo: (userData: any) => void;
+  updateUserInfo: (userData: Partial<AuthUser>) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
   clearError: () => void;

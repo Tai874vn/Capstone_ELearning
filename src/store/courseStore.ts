@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import api from '../services/api';
-import type { Course, CourseCategory, CourseState, CourseDetail } from '../types/Index';
+import type { CourseState } from '../types/Index';
 
 export const useCourseStore = create<CourseState>()(
   devtools(
@@ -35,9 +35,9 @@ export const useCourseStore = create<CourseState>()(
             featuredCourses: sortedByViews.slice(0, 6), // Top 6 most viewed courses
             loading: false
           });
-        } catch (error: any) {
+        } catch (error: unknown) {
           set({
-            error: error.response?.data?.message || 'Failed to fetch courses',
+            error: (error as { response?: { data?: { message?: string } } }).response?.data?.message || 'Failed to fetch courses',
             loading: false
           });
         }
@@ -48,9 +48,9 @@ export const useCourseStore = create<CourseState>()(
           set({ loading: true, error: null });
           const response = await api.get(`/QuanLyKhoaHoc/LayThongTinKhoaHoc?maKhoaHoc=${courseCode}`);
           set({ courseDetail: response.data, loading: false });
-        } catch (error: any) {
+        } catch (error: unknown) {
           set({
-            error: error.response?.data?.message || 'Failed to fetch course details',
+            error: (error as { response?: { data?: { message?: string } } }).response?.data?.message || 'Failed to fetch course details',
             loading: false
           });
         }
@@ -60,8 +60,8 @@ export const useCourseStore = create<CourseState>()(
         try {
           const response = await api.get('/QuanLyKhoaHoc/LayDanhMucKhoaHoc');
           set({ categories: response.data });
-        } catch (error: any) {
-          set({ error: error.response?.data?.message || 'Failed to fetch categories' });
+        } catch (error: unknown) {
+          set({ error: (error as { response?: { data?: { message?: string } } }).response?.data?.message || 'Failed to fetch categories' });
         }
       },
 
@@ -84,9 +84,10 @@ export const useCourseStore = create<CourseState>()(
             totalPages,
             loading: false
           });
-        } catch (error: any) {
+        } catch (error: unknown) {
+          const err = error as { response?: { data?: { message?: string } }; message?: string };
           set({
-            error: error.response?.data?.message || error.message || 'Failed to fetch courses by category',
+            error: err.response?.data?.message || err.message || 'Failed to fetch courses by category',
             loading: false
           });
         }
@@ -112,9 +113,9 @@ export const useCourseStore = create<CourseState>()(
             totalPages,
             loading: false
           });
-        } catch (error: any) {
+        } catch (error: unknown) {
           set({
-            error: error.response?.data?.message || 'Failed to search courses',
+            error: (error as { response?: { data?: { message?: string } } }).response?.data?.message || 'Failed to search courses',
             loading: false
           });
         }
@@ -139,9 +140,10 @@ export const useCourseStore = create<CourseState>()(
             totalPages,
             loading: false
           });
-        } catch (error: any) {
+        } catch (error: unknown) {
+          const err = error as { response?: { data?: { message?: string } }; message?: string };
           set({
-            error: error.response?.data?.message || error.message || 'Failed to fetch courses by group',
+            error: err.response?.data?.message || err.message || 'Failed to fetch courses by group',
             loading: false
           });
         }

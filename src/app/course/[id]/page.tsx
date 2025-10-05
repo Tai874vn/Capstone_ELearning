@@ -2,23 +2,19 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { useTheme } from '@/context/themecontext';
 import { useCourseStore } from '@/store/courseStore';
 import { useAuthStore } from '@/store/authStore';
 import { courseService } from '@/services/courseService';
 import { Button } from '@/components/ui/button';
 import { BackToHome } from '@/components/ui/BackToHome';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import {
-  CalendarDays,
-  Users,
   Eye,
   Star,
-  Clock,
-  BookOpen,
   User,
   ArrowLeft,
   CheckCircle,
@@ -145,14 +141,6 @@ export default function CourseDetailPage() {
     );
   }
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-  };
-
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Back Navigation */}
@@ -173,13 +161,14 @@ export default function CourseDetailPage() {
           <div className="mb-8 bg-white rounded-lg shadow-lg overflow-hidden">
             <div className="flex flex-col lg:flex-row">
               {/* Left: Image */}
-              <div className="lg:w-2/5 relative">
-                <img
+              <div className="lg:w-2/5 relative h-64 lg:h-auto">
+                <Image
                   src={courseDetail.hinhAnh}
                   alt={courseDetail.tenKhoaHoc}
-                  className="w-full h-64 lg:h-full object-cover"
+                  fill
+                  className="object-cover"
                 />
-                <div className="absolute top-4 right-4">
+                <div className="absolute top-4 right-4 z-10">
                   <Badge variant="secondary" className="bg-blue-600 text-white">
                     {courseDetail.danhMucKhoaHoc.tenDanhMucKhoaHoc}
                   </Badge>

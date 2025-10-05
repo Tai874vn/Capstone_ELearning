@@ -1,26 +1,23 @@
 'use client';
 
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCourseStore } from '../../store/courseStore';
 import { CourseCard } from '../../components/ui/CourseCard';
-import { CourseCarousel } from '../../components/ui/CourseCarousel';
 import { CoursePagination } from '../../components/ui/CoursePagination';
 import { SearchBar } from '../../components/ui/SearchBar';
 
-export default function DanhMucKhoaHocPage() {
+function DanhMucKhoaHocContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const {
     courses,
     categories,
-    featuredCourses,
     loading,
     error,
     currentPage,
     totalCount,
     totalPages,
-    fetchCourses,
     fetchCategories,
     searchCourses,
     fetchCoursesByCategory,
@@ -330,5 +327,17 @@ export default function DanhMucKhoaHocPage() {
         </section>
       </main>
     </div>
+  );
+}
+
+export default function DanhMucKhoaHocPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    }>
+      <DanhMucKhoaHocContent />
+    </Suspense>
   );
 }

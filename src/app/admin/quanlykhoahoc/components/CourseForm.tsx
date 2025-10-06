@@ -120,7 +120,6 @@ export default function CourseForm({ course, onSuccess }: CourseFormProps) {
                   <Input
                     {...field}
                     placeholder="Nhập mã khóa học"
-                    disabled={isEditMode}
                   />
                 </FormControl>
                 <FormMessage />

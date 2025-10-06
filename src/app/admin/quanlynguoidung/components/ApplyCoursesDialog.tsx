@@ -162,7 +162,7 @@ export default function ApplyCoursesDialog({ user }: ApplyCoursesDialogProps) {
                   <tr>
                     <th className="px-4 py-2 text-left text-gray-700 font-medium">STT</th>
                     <th className="px-4 py-2 text-left text-gray-700 font-medium">Tên khóa học</th>
-                    <th className="px-4 py-2 text-left text-gray-700 font-medium">Chờ xác nhận</th>
+                    <th className="px-4 py-2 text-left text-gray-700 font-medium">Đã xác nhận</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white">

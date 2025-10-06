@@ -32,7 +32,7 @@ export default function ApplyUsersDialog({ course }: ApplyUsersDialogProps) {
   });
 
   // Fetch pending students
-  const { data: pendingStudents, isLoading: loadingPending } = useQuery({
+  const { data: _pendingStudents, isLoading: _loadingPending } = useQuery({
     queryKey: ["pending-students", course.maKhoaHoc],
     queryFn: () => adminCourseService.getPendingStudents(course.maKhoaHoc),
     enabled: isOpen,

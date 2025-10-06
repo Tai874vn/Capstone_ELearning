@@ -75,8 +75,8 @@ export default function ProfilePage() {
         maLoaiNguoiDung: userData.maLoaiNguoiDung || 'HV',
         maNhom: userData.maNhom || 'GP01',
       });
-    } catch (error) {
-      // console.error('Error loading user info:', error);
+    } catch (_error) {
+      // console.error('Error loading user info:', _error);
       toast.error('Không thể tải thông tin người dùng');
     } finally {
       setLoading(false);
@@ -91,8 +91,8 @@ export default function ProfilePage() {
       const courses = await courseService.getEnrolledCourses(user.taiKhoan);
       setEnrolledCourses(courses);
       setFilteredCourses(courses);
-    } catch (error) {
-      // console.error('Error loading enrolled courses:', error);
+    } catch (_error) {
+      // console.error('Error loading enrolled courses:', _error);
       toast.error('Không thể tải danh sách khóa học');
     } finally {
       setCoursesLoading(false);

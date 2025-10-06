@@ -6,7 +6,7 @@ import { adminUserService } from "@/services/adminUserService";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Pagination } from "@/components/ui/Pagination";
-import { Plus, Pencil, Trash2, Search } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -59,11 +59,6 @@ export default function QuanLyNguoiDungPage() {
   const handleEdit = (user: User) => {
     setSelectedUser(user);
     setIsEditDialogOpen(true);
-  };
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    setCurrentPage(1);
   };
 
   const handleSearchChange = (value: string) => {

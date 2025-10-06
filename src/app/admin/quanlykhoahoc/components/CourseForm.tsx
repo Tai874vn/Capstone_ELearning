@@ -109,17 +109,64 @@ export default function CourseForm({ course, onSuccess }: CourseFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <FormField
+          control={form.control}
+          name="maKhoaHoc"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Mã khóa học</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  placeholder="Nhập mã khóa học"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="tenKhoaHoc"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Tên khóa học</FormLabel>
+              <FormControl>
+                <Input {...field} placeholder="Nhập tên khóa học" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="biDanh"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Bí danh</FormLabel>
+              <FormControl>
+                <Input {...field} placeholder="Nhập bí danh" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <div className="grid grid-cols-2 gap-4">
           <FormField
             control={form.control}
-            name="maKhoaHoc"
+            name="luotXem"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Mã khóa học</FormLabel>
+                <FormLabel>Lượt xem</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
-                    placeholder="Nhập mã khóa học"
+                    type="number"
+                    placeholder="0"
+                    onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
                   />
                 </FormControl>
                 <FormMessage />
@@ -138,41 +185,6 @@ export default function CourseForm({ course, onSuccess }: CourseFormProps) {
                     {...field}
                     type="number"
                     placeholder="0-5"
-                    onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <FormField
-            control={form.control}
-            name="tenKhoaHoc"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Tên khóa học</FormLabel>
-                <FormControl>
-                  <Input {...field} placeholder="Nhập tên khóa học" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="luotXem"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Lượt xem</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    type="number"
-                    placeholder="0"
                     onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
                   />
                 </FormControl>

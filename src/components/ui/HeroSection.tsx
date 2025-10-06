@@ -23,7 +23,7 @@ const HeroSection = () => {
             className="flex-1 flex items-center justify-end pr-12"
             initial={{ opacity: 0, x: -100 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+            transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] as const }}
           >
             <div className="relative">
               {/* Animated pulse rings */}
@@ -52,7 +52,7 @@ const HeroSection = () => {
             className="flex-1 text-left lg:pl-8"
             initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+            transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] as const, delay: 0.2 }}
           >
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-yellow-400 mb-6 tracking-tight leading-snug">
               KHỞI ĐẦU

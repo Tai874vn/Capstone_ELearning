@@ -45,7 +45,7 @@ export default function HomePage() {
       y: 0,
       transition: {
         duration: 0.5,
-        ease: "easeOut"
+        ease: [0.4, 0, 0.2, 1] as const
       }
     }
   };
@@ -62,7 +62,7 @@ export default function HomePage() {
             className="flex items-center justify-between mb-8"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
+            transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] as const }}
           >
             <h3 className="text-3xl font-bold text-foreground">
               Khóa Học Mới Cập Nhập

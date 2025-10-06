@@ -210,7 +210,7 @@ export default function ProfilePage() {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.6, ease: "easeOut" }
+      transition: { duration: 0.6, ease: [0.4, 0, 0.2, 1] as const }
     }
   };
 
@@ -219,7 +219,7 @@ export default function ProfilePage() {
     visible: {
       opacity: 1,
       scale: 1,
-      transition: { duration: 0.5, ease: "easeOut" }
+      transition: { duration: 0.5, ease: [0.4, 0, 0.2, 1] as const }
     }
   };
 
@@ -240,7 +240,7 @@ export default function ProfilePage() {
       y: 0,
       transition: {
         duration: 0.4,
-        ease: "easeOut"
+        ease: [0.4, 0, 0.2, 1] as const
       }
     }
   };
@@ -260,7 +260,7 @@ export default function ProfilePage() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
+        transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] as const, delay: 0.2 }}
       >
         <Tabs defaultValue="profile" className="w-full">
         <TabsList className="grid w-full grid-cols-2">

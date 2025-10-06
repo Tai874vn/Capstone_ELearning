@@ -32,8 +32,8 @@ export default function ApplyCoursesDialog({ user }: ApplyCoursesDialogProps) {
     enabled: isOpen,
   });
 
-  // Fetch pending courses
-  const { data: _pendingCourses, isLoading: _loadingPending } = useQuery({
+  // Fetch pending courses (for cache invalidation)
+  useQuery({
     queryKey: ["pending-courses", user.taiKhoan],
     queryFn: () => adminUserService.getPendingCourses(user.taiKhoan),
     enabled: isOpen,

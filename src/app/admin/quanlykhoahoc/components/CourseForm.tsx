@@ -266,7 +266,7 @@ export default function CourseForm({ course, onSuccess }: CourseFormProps) {
         <FormField
           control={form.control}
           name="moTa"
-          render={({ field }) => (
+          render={() => (
             <FormItem>
               <FormLabel>Mô tả</FormLabel>
               <FormControl>

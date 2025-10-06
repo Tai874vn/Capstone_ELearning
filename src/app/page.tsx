@@ -2,6 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
 import { useCourseStore } from '../store/courseStore';
 import { CourseCard } from '../components/ui/CourseCard';
 import  HeroSection  from '../components/ui/HeroSection'
@@ -26,6 +27,29 @@ export default function HomePage() {
     .sort((a, b) => new Date(b.ngayTao).getTime() - new Date(a.ngayTao).getTime())
     .slice(0, 8);
 
+  // Animation variants for stagger effect
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut"
+      }
+    }
+  };
+
   return (
     <>
       {/* Hero Section */}
@@ -34,7 +58,12 @@ export default function HomePage() {
       {/* Recent Courses Section */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <section>
-          <div className="flex items-center justify-between mb-8">
+          <motion.div
+            className="flex items-center justify-between mb-8"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          >
             <h3 className="text-3xl font-bold text-foreground">
               Khóa Học Mới Cập Nhập
             </h3>
@@ -44,7 +73,7 @@ export default function HomePage() {
             >
               Tất Cả Khóa Học →
             </button>
-          </div>
+          </motion.div>
 
           {/* Loading State */}
           {loading && (
@@ -69,15 +98,21 @@ export default function HomePage() {
 
           {/* Recent Courses Grid */}
           {!loading && recentCourses.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <motion.div
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+            >
               {recentCourses.map((course) => (
-                <CourseCard
-                  key={course.maKhoaHoc}
-                  course={course}
-                  onClick={handleCourseClick}
-                />
+                <motion.div key={course.maKhoaHoc} variants={itemVariants}>
+                  <CourseCard
+                    course={course}
+                    onClick={handleCourseClick}
+                  />
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           )}
 
           {/* Empty State */}

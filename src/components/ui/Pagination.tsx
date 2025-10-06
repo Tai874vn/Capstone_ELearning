@@ -47,7 +47,7 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
   const pageNumbers = getPageNumbers();
 
   return (
-    <div className="px-6 py-4 flex items-center justify-center gap-1 border-t border-gray-200 dark:border-gray-700">
+    <div className="px-6 py-4 flex items-center justify-center gap-1 border-t border-gray-200 bg-white">
       {/* First Page */}
       <Button
         variant="outline"
@@ -76,7 +76,7 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
           return (
             <span
               key={`ellipsis-${index}`}
-              className="px-3 py-1 text-gray-500"
+              className="px-3 py-1 text-gray-900"
             >
               ...
             </span>
@@ -89,6 +89,7 @@ export function Pagination({ currentPage, totalPages, onPageChange }: Pagination
             variant={currentPage === page ? "default" : "outline"}
             size="sm"
             onClick={() => onPageChange(page as number)}
+            className={currentPage === page ? "bg-blue-600 hover:bg-blue-700 text-white" : ""}
           >
             {page}
           </Button>

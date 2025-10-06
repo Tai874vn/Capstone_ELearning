@@ -3,18 +3,52 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState, useRef } from 'react';
 import { useTheme } from '../context/themecontext';
 import { useAuthStore } from '../store/authStore';
+import { useCourseStore } from '../store/courseStore';
 import { Button } from './ui/button';
 
 export function Header() {
   const { theme, toggleTheme } = useTheme();
   const { user, isAuthenticated, logout } = useAuthStore();
+  const { categories, fetchCategories } = useCourseStore();
   const router = useRouter();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    if (isDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isDropdownOpen]);
 
   const handleLogout = () => {
     logout();
     router.push('/');
+  };
+
+  const handleCategoryClick = (categoryCode: string = 'all') => {
+    const url = categoryCode === 'all'
+      ? '/danhmuckhoahoc?manhom=GP01'
+      : `/danhmuckhoahoc?madanhmuc=${categoryCode}&manhom=GP01`;
+    router.push(url);
+    setIsDropdownOpen(false);
   };
 
   return (
@@ -32,12 +66,44 @@ export function Header() {
               />
               <span>CYBERSOFT</span>
             </Link>
-            <Link
-              href="/danhmuckhoahoc?manhom=GP01"
-              className="text-lg font-medium text-muted-foreground hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-            >
-              Danh Mục Khóa Học
-            </Link>
+            <div className="relative" ref={dropdownRef}>
+              <button
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="flex items-center space-x-1 text-lg font-medium text-muted-foreground hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer"
+              >
+                <span>Danh Mục Khóa Học</span>
+                <svg
+                  className={`w-4 h-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              {isDropdownOpen && (
+                <div className="absolute top-full left-0 mt-2 w-64 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 rounded-lg shadow-xl z-50 max-h-96 overflow-y-auto">
+                  <div className="py-2">
+                    <button
+                      onClick={() => handleCategoryClick('all')}
+                      className="w-full text-left px-4 py-2 text-sm text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors font-medium"
+                    >
+                      Tất Cả Khóa Học
+                    </button>
+                    {categories.map((category) => (
+                      <button
+                        key={category.maDanhMuc}
+                        onClick={() => handleCategoryClick(category.maDanhMuc)}
+                        className="w-full text-left px-4 py-2 text-sm text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                      >
+                        {category.tenDanhMuc}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
           <div className="flex items-center space-x-4">
             {isAuthenticated ? (

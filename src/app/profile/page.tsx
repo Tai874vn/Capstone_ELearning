@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { toast } from 'sonner';
+import { motion } from 'framer-motion';
 import { useAuthStore } from '@/store/authStore';
 import { userService } from '@/services/userService';
 import { courseService } from '@/services/courseService';
@@ -75,7 +76,7 @@ export default function ProfilePage() {
         maNhom: userData.maNhom || 'GP01',
       });
     } catch (error) {
-      console.error('Error loading user info:', error);
+      // console.error('Error loading user info:', error);
       toast.error('Không thể tải thông tin người dùng');
     } finally {
       setLoading(false);
@@ -91,7 +92,7 @@ export default function ProfilePage() {
       setEnrolledCourses(courses);
       setFilteredCourses(courses);
     } catch (error) {
-      console.error('Error loading enrolled courses:', error);
+      // console.error('Error loading enrolled courses:', error);
       toast.error('Không thể tải danh sách khóa học');
     } finally {
       setCoursesLoading(false);
@@ -161,7 +162,7 @@ export default function ProfilePage() {
 
       toast.success('Hủy đăng ký khóa học thành công!');
     } catch (error: unknown) {
-      console.error('Error unenrolling from course:', error);
+      // console.error('Error unenrolling from course:', error);
       toast.error((error as Error).message || 'Hủy đăng ký thất bại');
     }
   };
@@ -178,7 +179,7 @@ export default function ProfilePage() {
 
       toast.success('Cập nhật thông tin thành công!');
     } catch (error: unknown) {
-      console.error('Error updating user info:', error);
+      // console.error('Error updating user info:', error);
       toast.error((error as Error).message || 'Cập nhật thông tin thất bại');
     } finally {
       setLoading(false);
@@ -203,21 +204,77 @@ export default function ProfilePage() {
     return null;
   }
 
+  // Animation variants
+  const headerVariants = {
+    hidden: { opacity: 0, y: -20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: "easeOut" }
+    }
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, scale: 0.95 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: { duration: 0.5, ease: "easeOut" }
+    }
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.4,
+        ease: "easeOut"
+      }
+    }
+  };
+
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8">
+      <motion.div
+        className="mb-8"
+        variants={headerVariants}
+        initial="hidden"
+        animate="visible"
+      >
         <h1 className="text-3xl font-bold text-foreground">Thông Tin Cá Nhân</h1>
         <p className="text-muted-foreground mt-2">Quản lý thông tin cá nhân và khóa học của bạn</p>
-      </div>
+      </motion.div>
 
-      <Tabs defaultValue="profile" className="w-full">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
+      >
+        <Tabs defaultValue="profile" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="profile">Thông Tin Cá Nhân</TabsTrigger>
           <TabsTrigger value="courses">Khóa Học Của Tôi</TabsTrigger>
         </TabsList>
 
         <TabsContent value="profile" className="mt-6">
-          <Card>
+          <motion.div
+            variants={cardVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            <Card>
             <CardHeader>
               <CardTitle>Cập Nhật Thông Tin</CardTitle>
             </CardHeader>
@@ -365,10 +422,16 @@ export default function ProfilePage() {
               </form>
             </CardContent>
           </Card>
+          </motion.div>
         </TabsContent>
 
         <TabsContent value="courses" className="mt-6">
-          <Card>
+          <motion.div
+            variants={cardVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            <Card>
             <CardHeader>
               <CardTitle>Khóa Học Của Tôi</CardTitle>
               <div className="flex items-center mt-4">
@@ -398,9 +461,15 @@ export default function ProfilePage() {
                 </div>
               ) : (
                 <>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <motion.div
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
+                    key={currentPage}
+                  >
                     {currentCourses.map((course) => (
-                      <div key={course.maKhoaHoc} className="relative">
+                      <motion.div key={course.maKhoaHoc} className="relative group" variants={itemVariants}>
                         <CourseCard
                           course={course}
                           onClick={handleCourseClick}
@@ -409,13 +478,13 @@ export default function ProfilePage() {
                           variant="destructive"
                           size="sm"
                           onClick={(e) => handleUnenroll(course.maKhoaHoc, e)}
-                          className="absolute top-2 right-2 z-10 h-8 w-8 p-0 bg-red-500 hover:bg-red-600 shadow-lg cursor-pointer"
+                          className="absolute top-2 left-2 z-10 h-8 w-8 p-0 bg-red-500 hover:bg-red-600 shadow-lg cursor-pointer group-hover:-translate-y-2 transition-transform duration-300"
                         >
                           <XCircle className="h-4 w-4" />
                         </Button>
-                      </div>
+                      </motion.div>
                     ))}
-                  </div>
+                  </motion.div>
 
                   {/* Pagination Controls */}
                   {totalPages > 1 && (
@@ -468,8 +537,10 @@ export default function ProfilePage() {
               )}
             </CardContent>
           </Card>
+          </motion.div>
         </TabsContent>
       </Tabs>
+      </motion.div>
     </div>
   );
 }

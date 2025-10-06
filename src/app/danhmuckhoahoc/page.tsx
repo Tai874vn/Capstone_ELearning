@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { motion } from 'framer-motion';
 import { useCourseStore } from '../../store/courseStore';
 import { CourseCard } from '../../components/ui/CourseCard';
 import { CoursePagination } from '../../components/ui/CoursePagination';
@@ -119,12 +120,58 @@ function DanhMucKhoaHocContent() {
     });
   };
 
+  // Animation variants
+  const headerVariants = {
+    hidden: { opacity: 0, y: -30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: "easeOut" }
+    }
+  };
+
+  const filterVariants = {
+    hidden: { opacity: 0, x: -20 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: 0.5, ease: "easeOut" }
+    }
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.08
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.4,
+        ease: "easeOut"
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen">
       {/* Header Section */}
       <section className="bg-card shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="text-center">
+          <motion.div
+            className="text-center"
+            variants={headerVariants}
+            initial="hidden"
+            animate="visible"
+          >
             <h1 className="text-4xl font-bold text-foreground mb-4">
               Danh Mục Khóa Học
             </h1>
@@ -138,14 +185,19 @@ function DanhMucKhoaHocContent() {
                 className="mb-4"
               />
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Group Filter */}
-        <div className="mb-6">
+        <motion.div
+          className="mb-6"
+          variants={filterVariants}
+          initial="hidden"
+          animate="visible"
+        >
           <h2 className="text-xl font-bold text-foreground mb-3">
             Chọn Nhóm
           </h2>
@@ -164,10 +216,16 @@ function DanhMucKhoaHocContent() {
               </button>
             ))}
           </div>
-        </div>
+        </motion.div>
 
         {/* Category Filter */}
-        <div className="mb-8">
+        <motion.div
+          className="mb-8"
+          variants={filterVariants}
+          initial="hidden"
+          animate="visible"
+          transition={{ delay: 0.2 }}
+        >
           <h2 className="text-2xl font-bold text-foreground mb-4">
             Duyệt Theo Danh Mục
           </h2>
@@ -196,7 +254,7 @@ function DanhMucKhoaHocContent() {
               </button>
             ))}
           </div>
-        </div>
+        </motion.div>
 
         {/* Featured Courses Carousel - Disabled */}
         {/* {!searchQuery && selectedCategory === 'all' && featuredCourses.length > 0 && (
@@ -268,15 +326,22 @@ function DanhMucKhoaHocContent() {
           {/* Courses Grid */}
           {!loading && courses.length > 0 && (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <motion.div
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+                key={currentPage}
+              >
                 {courses.map((course) => (
-                  <CourseCard
-                    key={course.maKhoaHoc}
-                    course={course}
-                    onClick={handleCourseClick}
-                  />
+                  <motion.div key={course.maKhoaHoc} variants={itemVariants}>
+                    <CourseCard
+                      course={course}
+                      onClick={handleCourseClick}
+                    />
+                  </motion.div>
                 ))}
-              </div>
+              </motion.div>
 
               {/* Pagination */}
               {totalPages > 1 && (

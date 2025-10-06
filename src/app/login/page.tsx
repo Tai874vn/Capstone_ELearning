@@ -52,7 +52,7 @@ export default function LoginPage() {
       clearError();
       // Convert email to account format for API
       await login({
-        taiKhoan: data.username, // API expects taiKhoan field
+        taiKhoan: data.username,
         matKhau: data.password,
       });
       toast.success('Login successful!');

@@ -77,12 +77,12 @@ export default function QuanLyKhoaHocPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+        <h1 className="text-3xl font-bold text-gray-900">
           Quản lý khóa học
         </h1>
         <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="flex items-center gap-2">
+            <Button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white">
               <Plus className="w-4 h-4" />
               Thêm khóa học
             </Button>
@@ -105,41 +105,41 @@ export default function QuanLyKhoaHocPage() {
             placeholder="Nhập vào tên khóa học"
             value={searchTerm}
             onChange={(e) => handleSearchChange(e.target.value)}
-            className="pl-10"
+            className="pl-10 bg-white border-gray-300"
           />
         </div>
       </div>
 
       {/* Table */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+      <div className="bg-white rounded-lg shadow border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50 dark:bg-gray-700">
+            <thead className="bg-gray-100">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                   STT
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                   Mã khóa học
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                   Tên khóa học
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                   Hình ảnh
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                   Lượt xem
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                   Người tạo
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                   Thao tác
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+            <tbody className="bg-white divide-y divide-gray-200">
               {isLoading ? (
                 <tr>
                   <td colSpan={7} className="px-6 py-4 text-center text-gray-500">
@@ -148,14 +148,14 @@ export default function QuanLyKhoaHocPage() {
                 </tr>
               ) : coursesData?.items && coursesData.items.length > 0 ? (
                 coursesData.items.map((course, index) => (
-                  <tr key={course.maKhoaHoc} className="hover:bg-gray-50 dark:hover:bg-gray-700">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                  <tr key={course.maKhoaHoc} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {(currentPage - 1) * pageSize + index + 1}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {course.maKhoaHoc}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                    <td className="px-6 py-4 text-sm text-gray-900">
                       {course.tenKhoaHoc}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
@@ -165,10 +165,10 @@ export default function QuanLyKhoaHocPage() {
                         className="w-16 h-10 object-cover rounded"
                       />
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {course.luotXem}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {course.nguoiTao?.hoTen || course.taiKhoanNguoiTao}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm space-x-2">
@@ -177,6 +177,7 @@ export default function QuanLyKhoaHocPage() {
                         variant="outline"
                         size="sm"
                         onClick={() => handleEdit(course)}
+                        className="bg-yellow-500 hover:bg-yellow-600 text-white border-yellow-500"
                       >
                         Sửa
                       </Button>
@@ -184,6 +185,7 @@ export default function QuanLyKhoaHocPage() {
                         variant="destructive"
                         size="sm"
                         onClick={() => handleDelete(course.maKhoaHoc)}
+                        className="bg-red-600 hover:bg-red-700 text-white"
                       >
                         X
                       </Button>

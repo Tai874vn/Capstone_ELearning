@@ -85,7 +85,7 @@ export default function ApplyCoursesDialog({ user }: ApplyCoursesDialogProps) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm">
+        <Button variant="outline" size="sm" className="bg-green-600 hover:bg-green-700 text-white border-green-600">
           Ghi danh
         </Button>
       </DialogTrigger>
@@ -102,30 +102,31 @@ export default function ApplyCoursesDialog({ user }: ApplyCoursesDialogProps) {
           placeholder="Nhập tên khóa học hoặc học viên"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-500"
         />
 
         {/* Unenrolled Courses */}
         <div className="space-y-2">
-          <h3 className="font-semibold text-sm">
-            Khóa học chưa ghi danh (Nếu không có thì không hiển thị)
+          <h3 className="font-semibold text-sm text-gray-900">
+            Khóa học chưa ghi danh 
           </h3>
           {loadingUnenrolled ? (
             <p className="text-sm text-gray-500">Đang tải...</p>
           ) : filteredUnenrolled && filteredUnenrolled.length > 0 ? (
-            <div className="border rounded-lg overflow-hidden border-gray-200 dark:border-gray-700">
+            <div className="border rounded-lg overflow-hidden border-gray-200 bg-white">
               <table className="w-full text-sm">
-                <thead className="bg-gray-50 dark:bg-gray-700">
+                <thead className="bg-gray-100">
                   <tr>
-                    <th className="px-4 py-2 text-left text-gray-700 dark:text-gray-300">STT</th>
-                    <th className="px-4 py-2 text-left text-gray-700 dark:text-gray-300">Tên khóa học</th>
-                    <th className="px-4 py-2 text-left text-gray-700 dark:text-gray-300">Chờ xác nhận</th>
+                    <th className="px-4 py-2 text-left text-gray-700 font-medium">STT</th>
+                    <th className="px-4 py-2 text-left text-gray-700 font-medium">Tên khóa học</th>
+                    <th className="px-4 py-2 text-left text-gray-700 font-medium">Chờ xác nhận</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white dark:bg-gray-800">
+                <tbody className="bg-white">
                   {filteredUnenrolled.slice(0, 5).map((course, index) => (
-                    <tr key={course.maKhoaHoc} className="border-t border-gray-200 dark:border-gray-700">
-                      <td className="px-4 py-2 text-gray-900 dark:text-gray-100">{index + 1}</td>
-                      <td className="px-4 py-2 text-gray-900 dark:text-gray-100">{course.tenKhoaHoc}</td>
+                    <tr key={course.maKhoaHoc} className="border-t border-gray-200">
+                      <td className="px-4 py-2 text-gray-900">{index + 1}</td>
+                      <td className="px-4 py-2 text-gray-900">{course.tenKhoaHoc}</td>
                       <td className="px-4 py-2">
                         <Button
                           size="sm"
@@ -149,26 +150,26 @@ export default function ApplyCoursesDialog({ user }: ApplyCoursesDialogProps) {
 
         {/* Approved Courses */}
         <div className="space-y-2">
-          <h3 className="font-semibold text-sm">
-            Khóa học đã tham gia 
+          <h3 className="font-semibold text-sm text-gray-900">
+            Khóa học đã tham gia
           </h3>
           {loadingApproved ? (
             <p className="text-sm text-gray-500">Đang tải...</p>
           ) : approvedCourses && approvedCourses.length > 0 ? (
-            <div className="border rounded-lg overflow-hidden border-gray-200 dark:border-gray-700">
+            <div className="border rounded-lg overflow-hidden border-gray-200 bg-white">
               <table className="w-full text-sm">
-                <thead className="bg-gray-50 dark:bg-gray-700">
+                <thead className="bg-gray-100">
                   <tr>
-                    <th className="px-4 py-2 text-left text-gray-700 dark:text-gray-300">STT</th>
-                    <th className="px-4 py-2 text-left text-gray-700 dark:text-gray-300">Tên khóa học</th>
-                    <th className="px-4 py-2 text-left text-gray-700 dark:text-gray-300">Chờ xác nhận</th>
+                    <th className="px-4 py-2 text-left text-gray-700 font-medium">STT</th>
+                    <th className="px-4 py-2 text-left text-gray-700 font-medium">Tên khóa học</th>
+                    <th className="px-4 py-2 text-left text-gray-700 font-medium">Chờ xác nhận</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white dark:bg-gray-800">
+                <tbody className="bg-white">
                   {approvedCourses.slice(0, 5).map((course, index) => (
-                    <tr key={course.maKhoaHoc} className="border-t border-gray-200 dark:border-gray-700">
-                      <td className="px-4 py-2 text-gray-900 dark:text-gray-100">{index + 1}</td>
-                      <td className="px-4 py-2 text-gray-900 dark:text-gray-100">{course.tenKhoaHoc}</td>
+                    <tr key={course.maKhoaHoc} className="border-t border-gray-200">
+                      <td className="px-4 py-2 text-gray-900">{index + 1}</td>
+                      <td className="px-4 py-2 text-gray-900">{course.tenKhoaHoc}</td>
                       <td className="px-4 py-2">
                         <Button
                           size="sm"

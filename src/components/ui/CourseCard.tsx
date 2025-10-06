@@ -12,10 +12,10 @@ export function CourseCard({ course, onClick }: CourseCardProps) {
 
   return (
     <div
-      className="border border-border rounded-lg shadow-lg overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer backdrop-blur-sm bg-white"
+      className="h-full flex flex-col border border-border rounded-lg shadow-lg overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer backdrop-blur-sm bg-white"
       onClick={() => onClick?.(course.maKhoaHoc)}
     >
-      <div className="relative h-48">
+      <div className="relative h-48 flex-shrink-0">
         <Image
           src={course.hinhAnh}
           alt={course.tenKhoaHoc}
@@ -23,21 +23,23 @@ export function CourseCard({ course, onClick }: CourseCardProps) {
           className="object-cover"
           loading="lazy"
         />
-        <div className="absolute top-2 right-2 bg-blue-600 text-white px-2 py-1 rounded text-sm">
-          {course.danhMucKhoaHoc?.tenDanhMucKhoaHoc || 'Chưa phân loại'}
-        </div>
+        {(course.danhMucKhoaHoc?.tenDanhMucKhoaHoc || course.maDanhMucKhoaHoc) && (
+          <div className="absolute top-2 right-2 bg-blue-600 text-white px-2 py-1 rounded text-sm">
+            {course.danhMucKhoaHoc?.tenDanhMucKhoaHoc || course.maDanhMucKhoaHoc}
+          </div>
+        )}
       </div>
 
-      <div className="p-6">
+      <div className="p-6 flex flex-col flex-grow">
         <h3 className="text-xl font-semibold text-gray-900 mb-2 line-clamp-2">
           {course.tenKhoaHoc}
         </h3>
 
-        <p className="text-gray-600 mb-4 line-clamp-3">
+        <p className="text-gray-600 mb-4 line-clamp-3 flex-grow">
           {course.moTa}
         </p>
 
-        <div className="flex items-center justify-between text-sm text-gray-600 mb-4">
+        <div className="flex items-center justify-between text-sm text-gray-600 mt-auto">
           <span>By {course.nguoiTao?.hoTen || 'Unknown'}</span>
           <div className="flex items-center gap-3">
             <div className="flex items-center">

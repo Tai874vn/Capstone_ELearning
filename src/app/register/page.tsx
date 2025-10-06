@@ -66,7 +66,7 @@ export default function RegisterPreview() {
       toast.success('Đăng Ký Thành Công!.')
       router.push('/login')
     } catch (error: unknown) {
-      console.error('Registration error:', error)
+      // console.error('Registration error:', error)
       toast.error((error as Error).message || 'Đăng Ký Thất Bại.')
     }
   }

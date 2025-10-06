@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Play } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const HeroSection = () => {
   return (
@@ -18,7 +19,12 @@ const HeroSection = () => {
       <div className="relative z-10 container mx-auto px-4">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-16 lg:gap-24">
           {/* Left content - Play button */}
-          <div className="flex-1 flex items-center justify-end pr-12">
+          <motion.div
+            className="flex-1 flex items-center justify-end pr-12"
+            initial={{ opacity: 0, x: -100 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
             <div className="relative">
               {/* Animated pulse rings */}
               <div className="absolute inset-0 -inset-10">
@@ -39,10 +45,15 @@ const HeroSection = () => {
                 <Play className="w-12 h-12 text-yellow-400 group-hover:text-black ml-1" fill="currentColor" />
               </button>
             </div>
-          </div>
+          </motion.div>
 
           {/* Right content - Text and buttons */}
-          <div className="flex-1 text-left lg:pl-8">
+          <motion.div
+            className="flex-1 text-left lg:pl-8"
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+          >
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-yellow-400 mb-6 tracking-tight leading-snug">
               KHỞI ĐẦU
               <br />
@@ -65,7 +76,7 @@ const HeroSection = () => {
                 Tư vấn học
               </button>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
       <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-transparent pointer-events-none" />

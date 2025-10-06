@@ -84,7 +84,7 @@ export default function ApplyUsersDialog({ course }: ApplyUsersDialogProps) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm">
+        <Button variant="outline" size="sm" className="bg-green-600 hover:bg-green-700 text-white border-green-600">
           Ghi danh
         </Button>
       </DialogTrigger>
@@ -98,35 +98,36 @@ export default function ApplyUsersDialog({ course }: ApplyUsersDialogProps) {
 
         {/* Search */}
         <Input
-          placeholder="Tên người dùng (Có thể search)"
+          placeholder="Tên người dùng"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-500"
         />
 
         {/* Unenrolled Students */}
         <div className="space-y-2">
-          <h3 className="font-semibold text-sm">
+          <h3 className="font-semibold text-sm text-gray-900">
             Học viên chờ xác thực
           </h3>
           {loadingUnenrolled ? (
             <p className="text-sm text-gray-500">Đang tải...</p>
           ) : filteredUnenrolled && filteredUnenrolled.length > 0 ? (
-            <div className="border rounded-lg overflow-hidden border-gray-200 dark:border-gray-700">
+            <div className="border rounded-lg overflow-hidden border-gray-200 bg-white">
               <table className="w-full text-sm">
-                <thead className="bg-gray-50 dark:bg-gray-700">
+                <thead className="bg-gray-100">
                   <tr>
-                    <th className="px-4 py-2 text-left text-gray-700 dark:text-gray-300">STT</th>
-                    <th className="px-4 py-2 text-left text-gray-700 dark:text-gray-300">Tài khoản</th>
-                    <th className="px-4 py-2 text-left text-gray-700 dark:text-gray-300">Họ tên</th>
-                    <th className="px-4 py-2 text-left text-gray-700 dark:text-gray-300">Chờ xác nhận</th>
+                    <th className="px-4 py-2 text-left text-gray-700 font-medium">STT</th>
+                    <th className="px-4 py-2 text-left text-gray-700 font-medium">Tài khoản</th>
+                    <th className="px-4 py-2 text-left text-gray-700 font-medium">Họ tên</th>
+                    <th className="px-4 py-2 text-left text-gray-700 font-medium">Chờ xác nhận</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white dark:bg-gray-800">
+                <tbody className="bg-white">
                   {filteredUnenrolled.slice(0, 5).map((student, index) => (
-                    <tr key={student.taiKhoan} className="border-t border-gray-200 dark:border-gray-700">
-                      <td className="px-4 py-2 text-gray-900 dark:text-gray-100">{index + 1}</td>
-                      <td className="px-4 py-2 text-gray-900 dark:text-gray-100">{student.taiKhoan}</td>
-                      <td className="px-4 py-2 text-gray-900 dark:text-gray-100">{student.hoTen}</td>
+                    <tr key={student.taiKhoan} className="border-t border-gray-200">
+                      <td className="px-4 py-2 text-gray-900">{index + 1}</td>
+                      <td className="px-4 py-2 text-gray-900">{student.taiKhoan}</td>
+                      <td className="px-4 py-2 text-gray-900">{student.hoTen}</td>
                       <td className="px-4 py-2">
                         <Button
                           size="sm"
@@ -150,28 +151,28 @@ export default function ApplyUsersDialog({ course }: ApplyUsersDialogProps) {
 
         {/* Approved Students */}
         <div className="space-y-2">
-          <h3 className="font-semibold text-sm">
-            Học viên đã tham gia khóa học (Nếu không có thì không hiển thị)
+          <h3 className="font-semibold text-sm text-gray-900">
+            Học viên đã tham gia khóa học
           </h3>
           {loadingApproved ? (
             <p className="text-sm text-gray-500">Đang tải...</p>
           ) : approvedStudents && approvedStudents.length > 0 ? (
-            <div className="border rounded-lg overflow-hidden border-gray-200 dark:border-gray-700">
+            <div className="border rounded-lg overflow-hidden border-gray-200 bg-white">
               <table className="w-full text-sm">
-                <thead className="bg-gray-50 dark:bg-gray-700">
+                <thead className="bg-gray-100">
                   <tr>
-                    <th className="px-4 py-2 text-left text-gray-700 dark:text-gray-300">STT</th>
-                    <th className="px-4 py-2 text-left text-gray-700 dark:text-gray-300">Tài khoản</th>
-                    <th className="px-4 py-2 text-left text-gray-700 dark:text-gray-300">Họ tên</th>
-                    <th className="px-4 py-2 text-left text-gray-700 dark:text-gray-300">Chờ xác nhận</th>
+                    <th className="px-4 py-2 text-left text-gray-700 font-medium">STT</th>
+                    <th className="px-4 py-2 text-left text-gray-700 font-medium">Tài khoản</th>
+                    <th className="px-4 py-2 text-left text-gray-700 font-medium">Họ tên</th>
+                    <th className="px-4 py-2 text-left text-gray-700 font-medium">Chờ xác nhận</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white dark:bg-gray-800">
+                <tbody className="bg-white">
                   {approvedStudents.slice(0, 5).map((student, index) => (
-                    <tr key={student.taiKhoan} className="border-t border-gray-200 dark:border-gray-700">
-                      <td className="px-4 py-2 text-gray-900 dark:text-gray-100">{index + 1}</td>
-                      <td className="px-4 py-2 text-gray-900 dark:text-gray-100">{student.taiKhoan}</td>
-                      <td className="px-4 py-2 text-gray-900 dark:text-gray-100">{student.hoTen}</td>
+                    <tr key={student.taiKhoan} className="border-t border-gray-200">
+                      <td className="px-4 py-2 text-gray-900">{index + 1}</td>
+                      <td className="px-4 py-2 text-gray-900">{student.taiKhoan}</td>
+                      <td className="px-4 py-2 text-gray-900">{student.hoTen}</td>
                       <td className="px-4 py-2">
                         <Button
                           size="sm"

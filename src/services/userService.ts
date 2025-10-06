@@ -8,7 +8,7 @@ export const userService = {
       const response = await api.put('/QuanLyNguoiDung/CapNhatThongTinNguoiDung', userData);
       return response.data;
     } catch (error: unknown) {
-      console.error('Update user info error:', error);
+      // console.error('Update user info error:', error);
 
       const err = error as { response?: { data?: { message?: string } } };
       if (err.response?.data?.message) {
@@ -28,7 +28,7 @@ export const userService = {
       const response = await api.get(`/QuanLyNguoiDung/LayThongTinNguoiDung?taiKhoan=${username}`);
       return response.data;
     } catch (error: unknown) {
-      console.error('Get user info error:', error);
+      // console.error('Get user info error:', error);
       throw new Error('Không thể lấy thông tin người dùng');
     }
   },

@@ -55,8 +55,8 @@ export default function CourseDetailPage() {
         try {
           const enrolledCourses = await courseService.getEnrolledCourses(user.taiKhoan);
           setIsEnrolled(enrolledCourses.some(course => course.maKhoaHoc === courseId));
-        } catch (_error) {
-          // console.error('Failed to check enrollment:', _error);
+        } catch {
+          // Failed to check enrollment
         }
       }
     };

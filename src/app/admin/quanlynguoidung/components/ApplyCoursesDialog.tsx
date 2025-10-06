@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import type { User, Course } from "@/types/Index";
+import type { User } from "@/types/Index";
 
 interface ApplyCoursesDialogProps {
   user: User;
@@ -33,7 +33,7 @@ export default function ApplyCoursesDialog({ user }: ApplyCoursesDialogProps) {
   });
 
   // Fetch pending courses
-  const { data: pendingCourses, isLoading: loadingPending } = useQuery({
+  const { data: _pendingCourses, isLoading: _loadingPending } = useQuery({
     queryKey: ["pending-courses", user.taiKhoan],
     queryFn: () => adminUserService.getPendingCourses(user.taiKhoan),
     enabled: isOpen,

@@ -27,8 +27,8 @@ export const userService = {
       // Note: Replace with actual API endpoint if available
       const response = await api.get(`/QuanLyNguoiDung/LayThongTinNguoiDung?taiKhoan=${username}`);
       return response.data;
-    } catch (_error: unknown) {
-      // console.error('Get user info error:', _error);
+    } catch {
+      // Get user info error
       throw new Error('Không thể lấy thông tin người dùng');
     }
   },

@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Pagination } from "@/components/ui/Pagination";
 import { Plus, Search } from "lucide-react";
 import { toast } from "sonner";
+import Image from "next/image";
 import {
   Dialog,
   DialogContent,
@@ -59,11 +60,6 @@ export default function QuanLyKhoaHocPage() {
   const handleEdit = (course: Course) => {
     setSelectedCourse(course);
     setIsEditDialogOpen(true);
-  };
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    setCurrentPage(1);
   };
 
   const handleSearchChange = (value: string) => {
@@ -159,10 +155,12 @@ export default function QuanLyKhoaHocPage() {
                       {course.tenKhoaHoc}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      <img
+                      <Image
                         src={course.hinhAnh}
                         alt={course.tenKhoaHoc}
-                        className="w-16 h-10 object-cover rounded"
+                        width={64}
+                        height={40}
+                        className="object-cover rounded"
                       />
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
